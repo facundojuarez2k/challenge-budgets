@@ -1,0 +1,14 @@
+{
+  "development": {
+    "storage": "../budgets.db",
+    "dialect": "sqlite"
+  },
+  "test": {
+    "storage": "../budgets.db",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "storage": "../budgets.db",
+    "dialect": "sqlite"
+  }
+}
