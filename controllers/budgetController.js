@@ -12,10 +12,10 @@ exports.index = async function(req, res, next) {
 
 exports.create = async function(req, res, next) {
     try {
-        const {concept, amount, type } = req.body;
+        const { concept, amount, type } = req.body;
         const newBudget = await Budget.create({concept, amount, type});
         res.status(201).json(budget);
     } catch(err) {
-        console.log(err);
+        //Log error
     }
 }

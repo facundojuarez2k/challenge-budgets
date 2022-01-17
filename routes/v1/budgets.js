@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const budgetController = require('../../controllers/budgetController');
+const { createBudgetValidator } = require('../../validators/budget');
 
-router.get('/', budgetController.index);
-router.post('/', budgetController.create);
+router.route('/').get(budgetController.index);
+router.route('/').post(createBudgetValidator, budgetController.create);
 
 module.exports = router;
