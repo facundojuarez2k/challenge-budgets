@@ -1,8 +1,11 @@
 const { User } = require('../models');
 
 exports.index = function(req, res, next) {
-    User.findAll().then(users => {
-        console.log(users);
+    let users = [];
+
+    User.findAll().then(fetchedUsers => {
+        users = fetchedUsers;
     });
-    res.send('NOT IMPLEMENTED');
+
+    res.json(users);
 };
