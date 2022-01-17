@@ -13,10 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
-    password: DataTypes.STRING
+    password: username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'User',
   });
+  
   return User;
 };

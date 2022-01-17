@@ -5,7 +5,16 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Budget extends Model {}
+  class Budget extends Model {
+    
+    static associate(models) {
+      this.belongsTo(models.User, {
+        foreignKey: { name: 'userId', allowNull: false },
+        onDelete: 'CASCADE',
+      });
+    }
+
+  }
  
   Budget.init({
     amount: {
@@ -15,11 +24,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Budget',
-  });
-  
-  Budget.belongsTo(models.User, {
-    foreignKey: { name: 'userId', allowNull: false },
-    onDelete: 'CASCADE',
   });
 
   return Budget;
