@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const budgetController = require('../../controllers/budgetController');
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', budgetController.index);
 
 module.exports = router;

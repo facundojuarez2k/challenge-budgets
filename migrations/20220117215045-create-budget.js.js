@@ -13,13 +13,12 @@ module.exports = {
         type: Sequelize.DECIMAL(10,2),
         allowNull: false
       },
-      user: {
+      userId: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
               model: 'User',
-              key: 'id',
-              as: 'userId'
+              key: 'id'
           },
           onDelete: 'CASCADE',
       },
