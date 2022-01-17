@@ -1,11 +1,11 @@
 const { User } = require('../models');
 
 exports.index = function(req, res, next) {
-    let users = [];
+    User.findAll({attributes: {exclude: ['password']}})
+        .then(fetchedUsers => {
+            fetchedUsers.
+            users = fetchedUsers;
 
-    User.findAll().then(fetchedUsers => {
-        users = fetchedUsers;
-    });
-
-    res.json(users);
+            res.json(fetchedUsers);
+        });
 };
