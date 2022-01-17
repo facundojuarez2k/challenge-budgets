@@ -17,10 +17,17 @@ module.exports = (sequelize, DataTypes) => {
   }
  
   Budget.init({
+    concept: {
+      type: DataTypes.STRING
+    },
     amount: {
       type: DataTypes.DECIMAL(10,2),
       allowNull: false
     },
+    type: {
+      type: DataTypes.ENUM(),
+      values: ['IN', 'OUT']
+    }
   }, {
     sequelize,
     modelName: 'Budget',

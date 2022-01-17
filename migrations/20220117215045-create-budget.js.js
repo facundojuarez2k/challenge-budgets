@@ -9,9 +9,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-        amount: {
+      concept: {
+        type: Sequelize.STRING
+      },
+      amount: {
         type: Sequelize.DECIMAL(10,2),
         allowNull: false
+      },
+      type: {
+        type: Sequelize.ENUM(),
+        values: ['IN', 'OUT']
       },
       userId: {
           type: Sequelize.INTEGER,
