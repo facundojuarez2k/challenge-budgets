@@ -7,10 +7,17 @@ const { ValidationError } = require('sequelize');
 exports.index = async function(req, res, next) {
     try {
         const user = await res.locals.user;
-        const operations = await Operation.findAll({where: {userId: user.id}});
+        const operations = await Operation.findAll(
+            {
+                where: { userId: user.id },
+                attributes: {
+                    exclude: ['userId']
+                }
+            }
+        );
         res.json(operations);
     } catch(err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 };
 
@@ -21,8 +28,21 @@ exports.create = async function(req, res, next) {
     try {
         const { concept, amount, type, date } = req.body;
         const user = await res.locals.user;
-        const newOperation = await Operation.create({concept, amount, type, date, userId: user.id});
-        res.status(201).json(newOperation);
+        
+        const newOperation = await Operation.create(
+            {
+                concept, 
+                amount, 
+                type, 
+                date, 
+                userId: user.id
+            }
+        );
+
+        const { userId, ...op } = newOperation.dataValues;
+
+        res.status(201).json(op);
+
     } catch(err) {
         console.log(err)
         //Log error
