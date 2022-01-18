@@ -1,8 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const sequelize = require('./models');
-
 const apiv1 = require('./routes/v1');
 
 const app = express();
