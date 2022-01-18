@@ -13,8 +13,8 @@ exports.index = async function(req, res, next) {
 exports.create = async function(req, res, next) {
     try {
         const { concept, amount, type, date } = req.body;
-        userId = 1;
-        const newOperation = await Operation.create({concept, amount, type, date, userId});
+        const user = await res.locals.user;
+        const newOperation = await Operation.create({concept, amount, type, date, userId: user.id});
         res.status(201).json(newOperation);
     } catch(err) {
         console.log(err)
@@ -40,12 +40,16 @@ exports.get = async function(req, res, next) {
 
 exports.update = async function(req, res, next) {
     try {
-        const operation = await Operation.findByPk(req.params.id, {
-            attributes: {exclude: ['userId']}
-        });
+        const user = await res.locals.user;
+        const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
             return res.status(404).send("Not found");
+
+        // Prevent authenticated user from modifying records that belong to another user
+        if(operation.userId !== user.id) {
+            return res.status(401).send("Access denied");
+        }
 
         const { concept, amount, date } = req.body;
 
@@ -68,10 +72,16 @@ exports.update = async function(req, res, next) {
 
 exports.delete = async function(req, res, next) {
     try {
+        const user = await res.locals.user;
         const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
             return res.status(404).send("Not found");
+
+        // Prevent authenticated user from modifying records that belong to another user
+        if(operation.userId !== user.id) {
+            return res.status(401).send("Access denied");
+        }
 
         await operation.destroy();
 

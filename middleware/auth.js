@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { User } = require('../models');
 
 exports.verifyToken = function (req, res, next) {
     let token;
@@ -14,7 +15,15 @@ exports.verifyToken = function (req, res, next) {
   
     try {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-        console.log(decoded);
+
+        const user = User.findByPk(decoded.userId);
+
+        if(!user) {
+            return res.status(404).send("Invalid user");
+        }
+
+        res.locals.user = user;
+
     } catch (err) {
         return res.status(401).send("Invalid Token");
     }
