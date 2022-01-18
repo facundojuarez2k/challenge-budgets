@@ -1,4 +1,4 @@
-const { Operation } = require('../models');
+const { sequelize, Operation } = require('../models');
 const { ValidationError } = require('sequelize');
 
 /**
@@ -126,6 +126,25 @@ exports.delete = async function(req, res, next) {
         await operation.destroy();
 
         res.status(204).send();
+    } catch(err) {
+        console.log(err)
+        //Log error
+    }
+}
+
+exports.balance_get = async function(req, res, next) {
+    try {
+        const user = await res.locals.user;
+        
+        // Sum column 'amount' for all records associated to the authenticated user
+        const total_amount = await Operation.findAll({
+            where: { userId: user.id },
+            attributes: [
+                [sequelize.fn('sum', sequelize.col('amount')), 'total_amount']
+            ]
+        })
+
+        res.json(total_amount);
     } catch(err) {
         console.log(err)
         //Log error
