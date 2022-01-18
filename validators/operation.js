@@ -1,6 +1,6 @@
 const {check, validationResult} = require('express-validator');
 
-exports.createOperationValidator = [
+const basicValidator = [
     check('concept')
         .trim()
         .escape()
@@ -12,7 +12,11 @@ exports.createOperationValidator = [
         .notEmpty()
         .withMessage('Amount field cannot be empty')
         .isNumeric()
-        .withMessage('Value should be numeric'),
+        .withMessage('Value should be numeric')
+];
+
+exports.createOperationValidator = [
+    ...basicValidator,
     check('type')
         .trim()
         .escape()
@@ -20,6 +24,16 @@ exports.createOperationValidator = [
             const validTypes = ["IN", "OUT"];
             return validTypes.includes(value);
         }),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return res.status(422).json({errors: errors.array()});
+        next();
+    },
+]
+
+exports.updateOperationValidator = [
+    ...basicValidator,
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())
