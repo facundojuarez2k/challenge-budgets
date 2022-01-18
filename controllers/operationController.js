@@ -29,7 +29,34 @@ exports.get = async function(req, res, next) {
         });
         
         if(operation === null)
-            return res.status(404).json("Not found");
+            return res.status(404).send("Not found");
+
+        res.json(operation);
+    } catch(err) {
+        console.log(err)
+        //Log error
+    }
+}
+
+exports.update = async function(req, res, next) {
+    try {
+        const operation = await Operation.findByPk(req.params.id, {
+            attributes: {exclude: ['userId']}
+        });
+        
+        if(operation === null)
+            return res.status(404).send("Not found");
+
+        const { concept, amount } = req.body;
+
+        operation.set({
+            concept,
+            amount,
+            updatedAt: Date.now()
+        });
+        operation.changed('updatedAt', true); // Allow modification of updatedAt field
+        
+        await operation.save();
 
         res.json(operation);
     } catch(err) {
