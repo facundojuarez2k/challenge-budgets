@@ -152,14 +152,35 @@ exports.balance_get = async function(req, res, next) {
         const user = await res.locals.user;
         
         // Sum column 'amount' for all records associated to the authenticated user
-        const total_amount = await Operation.findAll({
+        const operations = await Operation.findAll({
             where: { userId: user.id },
             attributes: [
+                'type',
                 [sequelize.fn('sum', sequelize.col('amount')), 'total_amount']
-            ]
-        })
+            ],
+            group: 'type'
+        });
 
-        res.json(total_amount);
+        const resData = {
+            total: 0,
+            in: 0,
+            out: 0
+        };
+
+        operations.forEach(op => {
+            const {type: opType, total_amount: opTotalAmount} = op.dataValues;
+
+            if(opType === "IN") {
+                resData.total += opTotalAmount;
+                resData.in = opTotalAmount;
+            } else if(opType === "OUT") {
+                resData.total -= opTotalAmount;
+                resData.out = opTotalAmount;
+            }
+        });
+
+        res.json(resData);
+
     } catch(err) {
         console.log(err)
         //Log error
