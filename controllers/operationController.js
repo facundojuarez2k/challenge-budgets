@@ -21,3 +21,19 @@ exports.create = async function(req, res, next) {
         //Log error
     }
 }
+
+exports.get = async function(req, res, next) {
+    try {
+        const operation = await Operation.findByPk(req.params.id, {
+            attributes: {exclude: ['userId']}
+        });
+        
+        if(operation === null)
+            return res.status(404).json("Not found");
+
+        res.json(operation);
+    } catch(err) {
+        console.log(err)
+        //Log error
+    }
+}
