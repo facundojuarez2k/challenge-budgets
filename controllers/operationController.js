@@ -1,15 +1,22 @@
 const { Operation } = require('../models');
 const { ValidationError } = require('sequelize');
 
+/**
+ * Returns all Operation records associated with the authenticated user
+ */
 exports.index = async function(req, res, next) {
     try {
-        const operations = await Operation.findAll();
+        const user = await res.locals.user;
+        const operations = await Operation.findAll({where: {userId: user.id}});
         res.json(operations);
     } catch(err) {
         res.status(500).send();
     }
 };
 
+/**
+ * Creates a new Operation linked to the authenticated user
+ */
 exports.create = async function(req, res, next) {
     try {
         const { concept, amount, type, date } = req.body;
@@ -22,14 +29,22 @@ exports.create = async function(req, res, next) {
     }
 }
 
+/**
+ *  Retrieves an Operation by its id
+ */
 exports.get = async function(req, res, next) {
     try {
+        const user = await res.locals.user;
         const operation = await Operation.findByPk(req.params.id, {
             attributes: {exclude: ['userId']}
         });
         
         if(operation === null)
             return res.status(404).send("Not found");
+
+        if(operation.userId !== user.id) {
+            return res.status(401).send("Access denied");
+        }
 
         res.json(operation);
     } catch(err) {
@@ -38,6 +53,9 @@ exports.get = async function(req, res, next) {
     }
 }
 
+/**
+ *  Updates an existing Operation given by the id param
+ */
 exports.update = async function(req, res, next) {
     try {
         const user = await res.locals.user;
@@ -46,7 +64,6 @@ exports.update = async function(req, res, next) {
         if(operation === null)
             return res.status(404).send("Not found");
 
-        // Prevent authenticated user from modifying records that belong to another user
         if(operation.userId !== user.id) {
             return res.status(401).send("Access denied");
         }
@@ -70,6 +87,9 @@ exports.update = async function(req, res, next) {
     }
 }
 
+/**
+ *  Deletes the Operation associated with the id param
+ */
 exports.delete = async function(req, res, next) {
     try {
         const user = await res.locals.user;
