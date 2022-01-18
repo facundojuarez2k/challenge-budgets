@@ -1,6 +1,6 @@
 const {check, validationResult} = require('express-validator');
 
-exports.createBudgetValidator = [
+exports.createOperationValidator = [
     check('concept')
         .trim()
         .escape()

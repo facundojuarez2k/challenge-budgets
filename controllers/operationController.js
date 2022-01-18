@@ -1,10 +1,10 @@
-const { Budget } = require('../models');
+const { Operation } = require('../models');
 const { ValidationError } = require('sequelize');
 
 exports.index = async function(req, res, next) {
     try {
-        const budgets = await Budget.findAll();
-        res.json(budgets);
+        const operations = await Operation.findAll();
+        res.json(operations);
     } catch(err) {
         res.status(500).send();
     }
@@ -14,8 +14,8 @@ exports.create = async function(req, res, next) {
     try {
         const { concept, amount, type } = req.body;
         userId = 1;
-        const newBudget = await Budget.create({concept, amount, type, userId});
-        res.status(201).json(newBudget);
+        const newOperation = await Operation.create({concept, amount, type, userId});
+        res.status(201).json(newOperation);
     } catch(err) {
         console.log(err)
         //Log error

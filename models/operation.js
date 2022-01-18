@@ -5,7 +5,7 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Budget extends Model {
+  class Operation extends Model {
     
     static associate(models) {
       this.belongsTo(models.User, {
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
 
   }
  
-  Budget.init({
+  Operation.init({
     concept: {
       type: DataTypes.STRING
     },
@@ -33,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Budget',
+    modelName: 'Operation',
   });
 
-  return Budget;
+  return Operation;
 };
