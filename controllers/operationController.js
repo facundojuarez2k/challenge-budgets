@@ -7,15 +7,30 @@ const { ValidationError } = require('sequelize');
 exports.index = async function(req, res, next) {
     try {
         const user = await res.locals.user;
-        const operations = await Operation.findAll(
-            {
-                where: { userId: user.id },
-                attributes: {
-                    exclude: ['userId']
-                }
-            }
-        );
+        const limit = req.query.limit;
+        const type = req.query.type;
+        const queryOptions = {
+            where: { userId: user.id },
+            attributes: {
+                exclude: ['userId']
+            },
+            order: [['createdAt', 'DESC']]
+        }
+
+        // If limit query param is set, limit the number of results
+        if(limit && parseInt(limit) > 0) {
+            queryOptions.limit = limit;
+        }
+
+        // Filter by operation type
+        if(type === "IN" || type === "OUT") {
+            queryOptions.where.type = type;
+        }
+
+        const operations = await Operation.findAll(queryOptions);
+
         res.json(operations);
+
     } catch(err) {
         return res.status(500).send();
     }
