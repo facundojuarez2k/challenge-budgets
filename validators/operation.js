@@ -12,7 +12,10 @@ const basicValidator = [
         .notEmpty()
         .withMessage('Amount field cannot be empty')
         .isNumeric()
-        .withMessage('Value should be numeric')
+        .withMessage('Value should be numeric'),
+    check('date')
+        .isDate()
+        .withMessage('Date should be in the format YYYY/MM/DD or YYYY-MM-DD')
 ];
 
 exports.createOperationValidator = [

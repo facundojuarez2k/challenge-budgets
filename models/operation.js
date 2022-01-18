@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.ENUM(),
       values: ['IN', 'OUT']
+    },
+    date: {
+      type: DataTypes.DATE
     }
   }, {
     sequelize,

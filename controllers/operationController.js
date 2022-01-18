@@ -12,9 +12,9 @@ exports.index = async function(req, res, next) {
 
 exports.create = async function(req, res, next) {
     try {
-        const { concept, amount, type } = req.body;
+        const { concept, amount, type, date } = req.body;
         userId = 1;
-        const newOperation = await Operation.create({concept, amount, type, userId});
+        const newOperation = await Operation.create({concept, amount, type, date, userId});
         res.status(201).json(newOperation);
     } catch(err) {
         console.log(err)
@@ -47,11 +47,12 @@ exports.update = async function(req, res, next) {
         if(operation === null)
             return res.status(404).send("Not found");
 
-        const { concept, amount } = req.body;
+        const { concept, amount, date } = req.body;
 
         operation.set({
             concept,
             amount,
+            date,
             updatedAt: Date.now()
         });
         operation.changed('updatedAt', true); // Allow modification of updatedAt field
