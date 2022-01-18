@@ -65,3 +65,19 @@ exports.update = async function(req, res, next) {
         //Log error
     }
 }
+
+exports.delete = async function(req, res, next) {
+    try {
+        const operation = await Operation.findByPk(req.params.id);
+        
+        if(operation === null)
+            return res.status(404).send("Not found");
+
+        await operation.destroy();
+
+        res.status(204).send();
+    } catch(err) {
+        console.log(err)
+        //Log error
+    }
+}
