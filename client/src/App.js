@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
-import { handleAuthentication } from './Services/auth';
+import { isUserAuthenticated } from './Services/auth';
 import './App.css';
 
 function App() {
   useEffect(() => {
-    handleAuthentication();
+    if(isUserAuthenticated()) {
+      // Show data
+    } else {
+      // Request login credentials
+    }
   }, []);
 
   return (
