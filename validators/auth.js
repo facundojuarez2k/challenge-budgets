@@ -1,19 +1,14 @@
 const {check, validationResult} = require('express-validator');
 
-exports.createUserValidator = [
+exports.authenticateValidator = [
     check('email')
-        .trim()
         .notEmpty()
         .withMessage('Email required')
-        .bail()
-        .isEmail()
-        .withMessage('Invalid email format'),
+        .bail(),
     check('password')
         .notEmpty()
         .withMessage('Password required')
-        .bail()
-        .isStrongPassword({minLength: 8, minLowercase: 1, minUppercase: 0, minNumbers: 1, minSymbols: 0})
-        .withMessage('Password should be at least 8 characters long, contain at least one lowercase character and at least one number'),
+        .bail(),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())

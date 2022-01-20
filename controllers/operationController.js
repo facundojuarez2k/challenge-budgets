@@ -1,3 +1,5 @@
+'use strict';
+
 const { sequelize, Operation } = require('../models');
 const { ValidationError } = require('sequelize');
 
