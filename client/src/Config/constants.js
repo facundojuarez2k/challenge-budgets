@@ -1,4 +1,4 @@
-const URL_BASE = "http://localhost:3000/v1";
+const URL_BASE = "http://127.0.0.1:8000/v1";
 
 export const ls = {
     BEARER_TOKEN_KEY: "bearerToken"
