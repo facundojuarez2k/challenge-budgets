@@ -83,7 +83,7 @@ exports.get = async function(req, res, next) {
 
         res.json(operation);
     } catch(err) {
-        console.log(err)
+        console.log(err);
         //Log error
     }
 }
@@ -117,7 +117,7 @@ exports.update = async function(req, res, next) {
 
         res.json(operation);
     } catch(err) {
-        console.log(err)
+        console.log(err);
         //Log error
     }
 }
@@ -142,7 +142,7 @@ exports.delete = async function(req, res, next) {
 
         res.status(204).send();
     } catch(err) {
-        console.log(err)
+        console.log(err);
         //Log error
     }
 }
@@ -182,7 +182,7 @@ exports.balance_get = async function(req, res, next) {
         res.json(resData);
 
     } catch(err) {
-        console.log(err)
+        console.log(err);
         //Log error
     }
 }
