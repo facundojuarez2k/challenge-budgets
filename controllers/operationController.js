@@ -17,7 +17,7 @@ exports.index = async function(req, res, next) {
                 exclude: ['userId']
             },
             order: [['createdAt', 'DESC']]
-        }
+        };
 
         // If limit query param is set, limit the number of results
         if(limit && parseInt(limit) > 0) {
@@ -31,7 +31,7 @@ exports.index = async function(req, res, next) {
 
         const operations = await Operation.findAll(queryOptions);
 
-        res.json(operations);
+        return res.json(operations);
 
     } catch(err) {
         return res.status(500).send();
@@ -58,11 +58,11 @@ exports.create = async function(req, res, next) {
 
         const { userId, ...op } = newOperation.dataValues;
 
-        res.status(201).json(op);
+        return res.status(201).json(op);
 
     } catch(err) {
-        console.log(err)
-        //Log error
+        console.log(err);
+        return res.status(500).send();
     }
 }
 
@@ -83,10 +83,10 @@ exports.get = async function(req, res, next) {
             return res.status(401).send("Access denied");
         }
 
-        res.json(operation);
+        return res.json(operation);
     } catch(err) {
         console.log(err);
-        //Log error
+        return res.status(500).send();
     }
 }
 
@@ -101,9 +101,8 @@ exports.update = async function(req, res, next) {
         if(operation === null)
             return res.status(404).send("Not found");
 
-        if(operation.userId !== user.id) {
+        if(operation.userId !== user.id)
             return res.status(401).send("Access denied");
-        }
 
         const { concept, amount, date } = req.body;
 
@@ -117,10 +116,10 @@ exports.update = async function(req, res, next) {
         
         await operation.save();
 
-        res.json(operation);
+        return res.json(operation);
     } catch(err) {
         console.log(err);
-        //Log error
+        return res.status(500).send();
     }
 }
 
@@ -142,10 +141,10 @@ exports.delete = async function(req, res, next) {
 
         await operation.destroy();
 
-        res.status(204).send();
+        return res.status(204).send();
     } catch(err) {
         console.log(err);
-        //Log error
+        return res.status(500).send();
     }
 }
 
@@ -181,10 +180,10 @@ exports.balance_get = async function(req, res, next) {
             }
         });
 
-        res.json(resData);
+        return res.json(resData);
 
     } catch(err) {
         console.log(err);
-        //Log error
+        return res.status(500).send();
     }
 }

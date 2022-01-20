@@ -6,7 +6,7 @@ const { User } = require('../models');
 
 exports.authenticateUser = async function(req, res, next) {
     try {
-        const data = {email, password} = req.body;
+        const { email, password } = req.body;
         
         // Check if email exists in the database
         const user = await User.findOne({ where: {email: email} });
@@ -24,12 +24,12 @@ exports.authenticateUser = async function(req, res, next) {
                 }
             );
 
-            res.status(200).json({token: token});
+            return res.status(200).json({token: token});
         } else {
             return res.status(400).send("Invalid credentials");
         }
     } catch(err) {
         console.log(err);
-        res.status(500).send();
+        return res.status(500).send();
     }
 };

@@ -10,7 +10,6 @@ exports.index = async function(req, res, next) {
 
 exports.create = async function(req, res, next) {
     try {
-
         const newCategory = await Category.create({
             name: req.body.name
         });
@@ -19,7 +18,7 @@ exports.create = async function(req, res, next) {
 
     } catch(err) {
 
-        if(err instanceof UniqueConstraintError){
+        if(err instanceof UniqueConstraintError){   // Duplicated category name
             return res.status(409).send('Category name already exists');
         } else {
             console.log(err);
