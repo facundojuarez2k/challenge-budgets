@@ -5,6 +5,6 @@ const router = express.Router();
 const authController = require('../../controllers/authController');
 const { authenticateValidator } = require('../../validators/auth');
 
-router.route('/authenticate').post(authenticateValidator, authController.authenticateUser);
+router.route('/token').post(authenticateValidator, authController.authenticateUser);
 
 module.exports = router;
