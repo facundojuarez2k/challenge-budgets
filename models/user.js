@@ -1,3 +1,6 @@
+/**
+ * User model
+ */
 'use strict';
 
 const {

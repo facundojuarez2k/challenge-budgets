@@ -1,3 +1,6 @@
+/**
+ * Category model
+ */
 'use strict';
 
 const {

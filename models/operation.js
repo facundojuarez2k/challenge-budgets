@@ -1,3 +1,6 @@
+/**
+ * Operation model
+ */
 'use strict';
 
 const {
