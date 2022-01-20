@@ -8,7 +8,7 @@ const { ValidationError } = require('sequelize');
  */
 exports.index = async function(req, res, next) {
     try {
-        const user = await res.locals.user;
+        const user = res.locals.user;
         const q_limit = req.query.limit;
         const q_type = req.query.type;
         const q_category = req.query.category;
@@ -55,7 +55,7 @@ exports.index = async function(req, res, next) {
 exports.create = async function(req, res, next) {
     try {
         const { concept, amount, type, date, categoryName } = req.body;
-        const user = await res.locals.user;
+        const user = res.locals.user;
 
         const [category, _] = await Category.findOrCreate({
             where: { name: categoryName },
@@ -90,7 +90,7 @@ exports.create = async function(req, res, next) {
  */
 exports.get = async function(req, res, next) {
     try {
-        const user = await res.locals.user;
+        const user = res.locals.user;
         const operation = await Operation.findByPk(req.params.id, {
             attributes: {exclude: ['userId']}
         });
@@ -114,7 +114,7 @@ exports.get = async function(req, res, next) {
  */
 exports.update = async function(req, res, next) {
     try {
-        const user = await res.locals.user;
+        const user = res.locals.user;
         const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
@@ -155,7 +155,7 @@ exports.update = async function(req, res, next) {
  */
 exports.delete = async function(req, res, next) {
     try {
-        const user = await res.locals.user;
+        const user = res.locals.user;
         const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
@@ -175,9 +175,9 @@ exports.delete = async function(req, res, next) {
     }
 }
 
-exports.balance_get = async function(req, res, next) {
+exports.getBalance = async function(req, res, next) {
     try {
-        const user = await res.locals.user;
+        const user = res.locals.user;
         
         // Sum column 'amount' for all records associated to the authenticated user
         const operations = await Operation.findAll({

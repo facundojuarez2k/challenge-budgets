@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const { User } = require('../models');
+const { responseCodes } = require('../config/constants');
 
-exports.verifyToken = function (req, res, next) {
+exports.verifyToken = async function (req, res, next) {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
@@ -10,22 +11,27 @@ exports.verifyToken = function (req, res, next) {
         token = req.query.token;
     
     if (!token) {
-        return res.status(403).send("Bearer token required");
+        return res
+                .status(responseCodes.invalidToken.status)
+                .json(responseCodes.invalidToken.details);
     }
   
     try {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-
-        const user = User.findByPk(decoded.userId);
+        const user = await User.findByPk(decoded.userId);
 
         if(!user) {
-            return res.status(404).send("Invalid user");
+            return res
+                    .status(responseCodes.invalidUserId.status)
+                    .send(responseCodes.invalidUserId.details);
         }
 
         res.locals.user = user;
 
     } catch (err) {
-        return res.status(401).send("Invalid Token");
+        return res
+                .status(responseCodes.invalidToken.status)
+                .send(responseCodes.invalidToken.details);
     }
 
     next();

@@ -5,7 +5,7 @@ const router = express.Router();
 const operationController = require('../../controllers/operationController');
 const { createOperationValidator, updateOperationValidator } = require('../../validators/operation');
 
-router.route('/balance').get(operationController.balance_get);
+router.route('/balance').get(operationController.getBalance);
 router.route('/').get(operationController.index);
 router.route('/').post(createOperationValidator, operationController.create);
 router.route('/:id').get(operationController.get);

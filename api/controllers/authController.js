@@ -3,6 +3,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { responseCodes } = require('../config/constants');
 
 exports.authenticateUser = async function(req, res, next) {
     try {
@@ -26,10 +27,17 @@ exports.authenticateUser = async function(req, res, next) {
 
             return res.status(200).json({token: token});
         } else {
-            return res.status(400).send("Invalid credentials");
+            return res
+                    .status(responseCodes.invalidCredentials.status)
+                    .send(responseCodes.invalidCredentials.details);
         }
     } catch(err) {
         console.log(err);
         return res.status(500).send();
     }
 };
+
+exports.testToken = async function(req, res, next) {
+    // Reaching this block means the token is valid
+    return res.status(200).send("OK");
+}
