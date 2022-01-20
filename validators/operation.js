@@ -1,3 +1,5 @@
+'use strict';
+
 const {check, validationResult} = require('express-validator');
 
 const basicValidator = [
@@ -38,7 +40,7 @@ exports.createOperationValidator = [
             return res.status(422).json({errors: errors.array()});
         next();
     },
-]
+];
 
 exports.updateOperationValidator = [
     ...basicValidator,
@@ -48,4 +50,4 @@ exports.updateOperationValidator = [
             return res.status(422).json({errors: errors.array()});
         next();
     },
-]
+];

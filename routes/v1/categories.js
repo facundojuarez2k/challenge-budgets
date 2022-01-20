@@ -2,8 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-const { categoryController } = require('../../controllers/categoryController');
-//const { categoryValidator } = require('../../validators/category');
+const categoryController = require('../../controllers/categoryController');
+const { categoryValidator } = require('../../validators/category');
 
 router.route('/').get(categoryController.index);
 
