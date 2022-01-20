@@ -11,6 +11,6 @@ const { verifyToken } = require('../../middleware/auth');
 router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/operations', verifyToken, operationRoutes);
-router.use('/categories', categoryRoutes);
+router.use('/categories', verifyToken, categoryRoutes);
 
 module.exports = router;
