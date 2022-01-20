@@ -1,10 +1,9 @@
-const URL_BASE = "http://127.0.0.1:8000/v1";
-
-export const ls = {
+export const ls = Object.freeze({
     BEARER_TOKEN_KEY: "bearerToken"
-};
+});
 
-export const api = {
-    URL_AUTH_TOKEN_TEST: URL_BASE + "/auth/token/test",
-    URL_AUTH_TOKEN: URL_BASE + "/auth/token"
-}
+export const api = Object.freeze({
+    URL_BASE: "http://127.0.0.1:8000/v1",
+    URL_AUTH_TOKEN_TEST: "/auth/token/test",
+    URL_AUTH_TOKEN: "/auth/token"
+});

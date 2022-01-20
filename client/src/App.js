@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { isUserAuthenticated } from './Services/auth';
 import './App.css';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   useEffect(() => {
     if(isUserAuthenticated()) {
       // Show data

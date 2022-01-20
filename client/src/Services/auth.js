@@ -1,18 +1,15 @@
-import axios from 'axios';
+import API from './requests';
 import {ls, api} from '../Config/constants';
 
-export async function isUserAuthenticated() {
-    const bearerToken = localStorage.getItem(ls.BEARER_TOKEN_KEY);
-    if(!bearerToken) {
-        //return false;
-    }
-    //Test token
+export async function isUserAuthenticated() {    
+    /* Test token */
     try {
-        const res = await axios.get(api.URL_AUTH_TOKEN_TEST, {
-            headers: { Authorization: `Bearer ${bearerToken}` }
-        });
+        await API.get(api.URL_AUTH_TOKEN_TEST);
         return true;
     } catch(err) {
-        console.log(err);
+        if(err.response.status === 401) {
+            localStorage.removeItem(ls.BEARER_TOKEN_KEY); // Remove invalid token
+        }
+        return false;
     }
 }
