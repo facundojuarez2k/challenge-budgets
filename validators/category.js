@@ -5,6 +5,9 @@ const {check, validationResult} = require('express-validator');
 exports.createCategoryValidator = [
     check('name')
         .trim()
+        .notEmpty()
+        .withMessage('Name required')
+        .bail()
         .escape()
         .isLength({min: 2, max: 30})
         .withMessage('Name length should be between 2 and 30 characters'),
