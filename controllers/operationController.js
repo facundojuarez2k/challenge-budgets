@@ -1,6 +1,6 @@
 'use strict';
 
-const { sequelize, Operation } = require('../models');
+const { sequelize, Operation, Category } = require('../models');
 const { ValidationError } = require('sequelize');
 
 /**
@@ -9,8 +9,10 @@ const { ValidationError } = require('sequelize');
 exports.index = async function(req, res, next) {
     try {
         const user = await res.locals.user;
-        const limit = req.query.limit;
-        const type = req.query.type;
+        const q_limit = req.query.limit;
+        const q_type = req.query.type;
+        const q_category = req.query.category;
+        
         const queryOptions = {
             where: { userId: user.id },
             attributes: {
@@ -20,13 +22,18 @@ exports.index = async function(req, res, next) {
         };
 
         // If limit query param is set, limit the number of results
-        if(limit && parseInt(limit) > 0) {
-            queryOptions.limit = limit;
+        if(q_limit && parseInt(q_limit) > 0) {
+            queryOptions.limit = q_limit;
         }
 
         // Filter by operation type
-        if(type === "IN" || type === "OUT") {
-            queryOptions.where.type = type;
+        if(q_type === "IN" || q_type === "OUT") {
+            queryOptions.where.type = q_type;
+        }
+
+        // Filter by category
+        if(q_category) {
+            queryOptions.where.categoryName = q_category
         }
 
         const operations = await Operation.findAll(queryOptions);
@@ -34,24 +41,36 @@ exports.index = async function(req, res, next) {
         return res.json(operations);
 
     } catch(err) {
+        console.log(err);
         return res.status(500).send();
     }
 };
 
 /**
  * Creates a new Operation linked to the authenticated user
+ * The new operation can be linked to a category by passing a string in the categoryName field,
+ * if the name does not match any category, it will create one.
+ * Returns the new operation.
  */
 exports.create = async function(req, res, next) {
     try {
-        const { concept, amount, type, date } = req.body;
+        const { concept, amount, type, date, categoryName } = req.body;
         const user = await res.locals.user;
+
+        const [category, _] = await Category.findOrCreate({
+            where: { name: categoryName },
+            defaults: {
+              name: categoryName
+            }
+        });
         
         const newOperation = await Operation.create(
             {
                 concept, 
                 amount, 
                 type, 
-                date, 
+                date,
+                categoryName: category.name,
                 userId: user.id
             }
         );
@@ -104,12 +123,20 @@ exports.update = async function(req, res, next) {
         if(operation.userId !== user.id)
             return res.status(401).send("Access denied");
 
-        const { concept, amount, date } = req.body;
+        const { concept, amount, date, categoryName } = req.body;
+
+        const [category, _] = await Category.findOrCreate({
+            where: { name: categoryName },
+            defaults: {
+              name: categoryName
+            }
+        });
 
         operation.set({
             concept,
             amount,
             date,
+            categoryName: category.name,
             updatedAt: Date.now()
         });
         operation.changed('updatedAt', true); // Allow modification of updatedAt field

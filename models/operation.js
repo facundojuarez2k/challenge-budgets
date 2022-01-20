@@ -15,6 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       });
+      this.belongsTo(models.Category, {
+        foreignKey: { 
+          name: 'categoryName', 
+          allowNull: true,
+        },
+        onDelete: 'RESTRICT',
+      });
     }
 
   }
