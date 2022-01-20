@@ -13,3 +13,13 @@ export async function isUserAuthenticated() {
         return false;
     }
 }
+
+export async function authenticateUser(credentials = {}) {
+    try {
+        const res = await API.post(api.URL_AUTH_TOKEN, credentials);
+        return res.data;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
