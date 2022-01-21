@@ -40,13 +40,27 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
                 fields && Object.keys(fields).map((fieldKey, index) => {
                     return (
                         <div key={index} className={styles.inputGroup}>
-                            <label>{fieldKey}</label>
-                            <input
-                                name={fieldKey}
-                                type={fields[fieldKey].type} 
-                                value={fields[fieldKey].value}
-                                onChange={onInputChange}
-                            />
+
+                            <label>{ fields[fieldKey].label || fieldKey }</label>
+                            
+                            {
+                                fields[fieldKey].type === "textarea" 
+                                ?
+                                <textarea
+                                    name={fieldKey}
+                                    value={fields[fieldKey].value}
+                                    onChange={onInputChange}
+                                />
+                                :
+                                <input
+                                    name={fieldKey}
+                                    type={fields[fieldKey].type} 
+                                    value={fields[fieldKey].value}
+                                    placeholder={fields[fieldKey].placeholder}
+                                    onChange={onInputChange}
+                                />
+                            }
+
                         </div>
                     )
                 })
