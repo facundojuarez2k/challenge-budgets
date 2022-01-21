@@ -4,12 +4,13 @@ import styles from './styles.module.css';
 function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     const [fields, setFields] = useState({});
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         setFields(Object.assign(propsFields));
     }, [propsFields]);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         
         if(validateFields()) {
@@ -18,11 +19,13 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
             for(const key in fields) {
                 data[key] = fields[key].value;
             }
-
-            onSubmit(data);
-        } else {
-
-        } 
+            
+            setIsSubmitting(true);
+            try { 
+                await onSubmit(data); 
+            } finally {}
+            setIsSubmitting(false);
+        }
     }
 
     function validateFields() {
@@ -93,7 +96,13 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
                     )
                 })
             }
-            <button onClick={handleSubmit}>{buttonText || "Send"}</button>
+            { 
+                isSubmitting 
+                ?
+                <button disabled>...</button>
+                :
+                <button onClick={handleSubmit}>{buttonText || "Send"}</button>
+            }
         </form>
     );
 }

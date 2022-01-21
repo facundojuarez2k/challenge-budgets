@@ -1,6 +1,24 @@
+import { useState, useEffect } from 'react';
 import Form from '../Form';
+import styles from './styles.module.css';
 
-function LoginForm({onSubmit}) {
+function LoginForm({ onSubmit, errors = [] }) {
+    const [errorList, setErrorList] = useState(null);
+
+    useEffect(() => {
+        if(errors && errors.length > 0) {
+            setErrorList(
+                <div className="submit-errors">
+                    {
+                        errors.map((errMsg, index) => <span key={index}>{errMsg}</span>)
+                    }
+                </div>
+            );
+        } else {
+            setErrorList(null);
+        }
+    }, [errors]);
+
     const fields = {
         email: {
             type: "email",
@@ -19,7 +37,11 @@ function LoginForm({onSubmit}) {
     };
 
     return (
-        <Form fields={fields} onSubmit={onSubmit} buttonText={"Login"} />
+        <div className="form-wrapper">
+            <span className="title2">Sign in</span>
+            <Form fields={fields} onSubmit={onSubmit} buttonText={"Login"} />
+            {errorList}
+        </div>
     );
 }
 
