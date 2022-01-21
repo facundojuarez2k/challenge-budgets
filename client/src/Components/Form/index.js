@@ -3,6 +3,7 @@ import styles from './styles.module.css';
 
 function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     const [fields, setFields] = useState({});
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         setFields(Object.assign(propsFields));
@@ -11,13 +12,34 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     function handleSubmit(event) {
         event.preventDefault();
         
-        const data = {};
+        if(validateFields()) {
+            const data = {};
+
+            for(const key in fields) {
+                data[key] = fields[key].value;
+            }
+
+            onSubmit(data);
+        } else {
+
+        } 
+    }
+
+    function validateFields() {
+        const invalidFields = {};
+        let invalidCount = 0;
 
         for(const key in fields) {
-            data[key] = fields[key].value;
+            if(fields[key].required === true && fields[key].value === "") {
+                invalidFields[key] = "This field is required";
+                invalidCount++;
+            } else {
+                invalidFields[key] = "";
+            }
         }
-
-        onSubmit(data);
+        setErrors(invalidFields);
+        
+        return invalidCount === 0;
     }
 
     function onInputChange(event) {
@@ -42,7 +64,7 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
                         <div key={index} className={styles.inputGroup}>
 
                             <label>{ fields[fieldKey].label || fieldKey }</label>
-                            
+
                             {
                                 fields[fieldKey].type === "textarea" 
                                 ?
@@ -60,7 +82,13 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
                                     onChange={onInputChange}
                                 />
                             }
-
+                            {
+                                (errors[fieldKey] && errors[fieldKey].length > 0)
+                                ?
+                                <span className={styles.errors}>{errors[fieldKey]}</span>
+                                :
+                                null
+                            }
                         </div>
                     )
                 })

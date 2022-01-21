@@ -6,12 +6,14 @@ function LoginForm({onSubmit}) {
             type: "email",
             placeholder: "Email",
             label: "Email",
+            required: true,
             value: ""
         },
         password: {
             type: "password",
             placeholder: "Password",
             label: "Password",
+            required: true,
             value: ""
         },
     };

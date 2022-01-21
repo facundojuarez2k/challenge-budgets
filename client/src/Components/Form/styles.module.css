@@ -11,6 +11,11 @@
     gap: 5px;
 }
 
+.inputGroup .errors {
+    padding-top: 3px;
+    color: rgb(255, 59, 59);
+}
+
 .form label {
     text-transform: capitalize;
     font-size: 1.1em;
