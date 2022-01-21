@@ -4,6 +4,7 @@ import styles from './App.module.css';
 import './Assets/css/styles.css';
 import searchLogo from './Assets/images/magnifying-glass.png';
 import LoginFormContainer from './Containers/LoginFormContainer';
+import OperationsContainer from './Containers/OperationsContainer';
 
 function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,7 +20,6 @@ function App() {
 
 			if(await isUserAuthenticated()) {
 				setIsAuthenticated(true);
-				// Request data
 			} else {
 				setIsAuthenticated(false);
 			}
@@ -28,8 +28,6 @@ function App() {
 			setIsLoading(false);
 		}
 	}
-
-	
 
 	return (
 		<div className={styles.App}>
@@ -52,9 +50,7 @@ function App() {
 							onAuthenticated={() => { setIsAuthenticated(true) }}
 						/>
 					: 
-					<div>
-						Content
-					</div>
+						<OperationsContainer />
 				}
 			</main>
 		</div>

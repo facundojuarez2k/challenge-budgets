@@ -24,6 +24,7 @@
 
 .search input {
   padding: 8px;
+  padding-right: 30px;
   width: 200px;
   font-size: 1.1rem;
   border: none;
