@@ -22,12 +22,13 @@ function App() {
 
   return (
     <div className={styles.App}>
-      <header>
-
-      </header>
+      <nav>
+        <a href="#">Register operation</a>
+        <input type="search" />
+      </nav>
       <main className="container">
         <div className="form-wrapper">
-          <span>Sign in</span>
+          <span className="title2">Sign in</span>
           <LoginForm onSubmit={(data) => console.log(data)} />
         </div>
       </main>

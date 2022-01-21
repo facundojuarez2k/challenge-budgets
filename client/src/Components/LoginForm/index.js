@@ -5,11 +5,13 @@ function LoginForm({onSubmit}) {
         email: {
             type: "email",
             placeholder: "Email",
+            label: "Email",
             value: ""
         },
         password: {
             type: "password",
             placeholder: "Password",
+            label: "Password",
             value: ""
         },
     };
