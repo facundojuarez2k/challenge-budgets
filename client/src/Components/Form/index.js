@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import { useEffect } from 'react/cjs/react.development';
+import {useState, useEffect} from 'react';
+import styles from './styles.module.css';
 
 function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     const [fields, setFields] = useState({});
@@ -35,11 +35,12 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     }
 
     return (
-        <form>
+        <form className={styles.form}>
             {
                 fields && Object.keys(fields).map((fieldKey, index) => {
                     return (
-                        <div key={index}>
+                        <div key={index} className={styles.inputGroup}>
+                            <label>{fieldKey}</label>
                             <input
                                 name={fieldKey}
                                 type={fields[fieldKey].type} 

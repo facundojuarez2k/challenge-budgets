@@ -1,4 +1,4 @@
-import Form from './Form';
+import Form from '../Form';
 
 function LoginForm({onSubmit}) {
     const fields = {

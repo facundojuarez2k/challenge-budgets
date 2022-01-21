@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { isUserAuthenticated, authenticateUser } from './Services/auth';
-import './App.css';
+import styles from './App.module.css';
+import './Assets/css/styles.css';
 import LoginForm from './Components/LoginForm';
 
 function App() {
@@ -20,13 +21,16 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className={styles.App}>
       <header>
 
       </header>
-      <div>
-        <LoginForm onSubmit={(data) => console.log(data)} />
-      </div>
+      <main className="container">
+        <div className="form-wrapper">
+          <span>Sign in</span>
+          <LoginForm onSubmit={(data) => console.log(data)} />
+        </div>
+      </main>
     </div>
   );
 }
