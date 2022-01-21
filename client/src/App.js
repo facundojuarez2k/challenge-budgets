@@ -7,6 +7,7 @@ import searchLogo from './Assets/images/magnifying-glass.png';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   useEffect(() => {
     init();
@@ -23,10 +24,16 @@ function App() {
 
   async function handleLogin(credentials) {
     try {
-      const result = await authenticateUser(credentials);
-    } catch {
-      // Error authenticating
-    }
+      
+      const {success, errorMessage} = await authenticateUser(credentials);
+      
+      if(success) {
+        setLoggedIn(true);
+      } else {
+        setLoginError(errorMessage);
+      }
+
+    } catch {}
   }
 
   return (
@@ -42,6 +49,12 @@ function App() {
         <div className="form-wrapper">
           <span className="title2">Sign in</span>
           <LoginForm onSubmit={(credentials) => handleLogin(credentials)} />
+          {
+            loginError !== "" 
+            ?
+            <div className={styles.errorBox}>{loginError}</div>
+            : null
+          }
         </div>
       </main>
     </div>

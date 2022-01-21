@@ -16,10 +16,22 @@ export async function isUserAuthenticated() {
 
 export async function authenticateUser(credentials = {}) {
     try {
-        const res = await API.post(api.URL_AUTH_TOKEN, credentials);
-        return res.data;
+        const {data} = await API.post(api.URL_AUTH_TOKEN, credentials);
+        
+        localStorage.setItem(ls.BEARER_TOKEN_KEY, data.token);
+        
+        return {
+            success: true
+        };
     } catch(err) {
-        console.log(err);
-        return false;
+        let msg = "Failed to authenticate";
+        
+        if(err.response.status === 422 || err.response.status === 400)
+            msg = err.response.data.message;
+        
+            return {
+            success: false,
+            errorMessage: msg
+        };
     }
 }
