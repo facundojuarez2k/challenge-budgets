@@ -4,11 +4,9 @@ import LoginForm from '../Components/LoginForm';
 
 function LoginFormContainer({ onAuthenticated }) {
     const [loginErrors, setLoginErrors] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     async function handleLogin(credentials) {
         try {
-            //setIsLoading(true);
             setLoginErrors([]);
             const {success, errorMessage} = await authenticateUser(credentials);
 
@@ -16,20 +14,16 @@ function LoginFormContainer({ onAuthenticated }) {
                 onAuthenticated();
             } else {
                 setLoginErrors([errorMessage]);
-                //setIsLoading(false);
             }
         } finally {}
     }
 
     return (
         <div>
-            {
-                isLoading ? <div>Loading..</div> :
-                <LoginForm 
-                    onSubmit={ (credentials) => handleLogin(credentials) }
-                    errors={loginErrors}
-                />
-            }
+            <LoginForm 
+                onSubmit={ (credentials) => handleLogin(credentials) }
+                errors={loginErrors}
+            />
         </div>
     )
 }

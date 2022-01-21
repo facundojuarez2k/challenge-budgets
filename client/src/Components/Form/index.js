@@ -2,9 +2,16 @@ import {useState, useEffect} from 'react';
 import styles from './styles.module.css';
 
 function Form({fields: propsFields = {}, onSubmit, buttonText}) {
+    const [isComponentMounted, setIsComponentMounted] = useState(false);
     const [fields, setFields] = useState({});
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Prevent async functions from updating state after the component is unmounted
+    useEffect(() => {
+        setIsComponentMounted(true);
+        return () => { setIsComponentMounted(false) };
+    }, []);
 
     useEffect(() => {
         setFields(Object.assign(propsFields));
@@ -21,10 +28,11 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
             }
             
             setIsSubmitting(true);
-            try { 
-                await onSubmit(data); 
-            } finally {}
-            setIsSubmitting(false);
+            
+            await onSubmit(data);
+            
+            if(isComponentMounted)
+                setIsSubmitting(false);
         }
     }
 
