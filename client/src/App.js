@@ -25,6 +25,7 @@ function App() {
   async function handleLogin(credentials) {
     try {
       
+      setLoginError("");
       const {success, errorMessage} = await authenticateUser(credentials);
       
       if(success) {
