@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import API from '../Services/requests';
-import { api } from '../Config/constants';
+import Operations from '../Components/Operations';
+import { api as apiConstants } from '../Config/constants';
 
 function OperationsContainer() {
     const [operations, setOperations] = useState([]);
@@ -11,15 +12,15 @@ function OperationsContainer() {
 
     async function fetchOperations() {
         try {
-            const {data} = await API.get(api.URL_OPERATIONS);
-            console.log(data);
+            const {data} = await API.get(apiConstants.URL_OPERATIONS);
+            setOperations(data);
         } catch(err) {
             // Handle error
         }
     }
 
     return (
-        <div>Container</div>
+        <Operations data={operations} />
     )
 }
 
