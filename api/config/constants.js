@@ -25,4 +25,32 @@ exports.responseCodes = Object.freeze({
             message: "Invalid credentials"
         }
     },
+    validationError: {
+        status: 422,
+        details: {
+            code: "ERRVAL001",
+            message: "Validation error"
+        }
+    },
+    forbidden: {
+        status: 403,
+        details: {
+            code: "ACC001",
+            message: "Permission to resource denied"
+        }
+    },
+    notFound: {
+        status: 404,
+        details: {
+            code: "RSRC001",
+            message: "Resource not found"
+        }
+    },
+    alreadyExists: {
+        status: 409,
+        details: {
+            code: "RSRC002",
+            message: "Resource already exists"
+        }
+    }
 });

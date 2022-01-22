@@ -3,6 +3,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { responseCodes } = require('../config/constants');
 
 exports.create = async function(req, res, next) {
     try {
@@ -11,7 +12,12 @@ exports.create = async function(req, res, next) {
         // Check if email exists in the database
         const existingUser = await User.findOne({ where: {email: email} });
         if(existingUser)
-            return res.status(409).send("Email already registered");
+            return res
+                    .status(responseCodes.alreadyExists.status)
+                    .send({
+                        ...responseCodes.alreadyExists.details,
+                        message: "Email aready registered"
+                    });
 
         const encryptedPassword = await bcrypt.hash(password, 10);
 

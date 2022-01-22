@@ -1,6 +1,7 @@
 'use strict';
 
 const { sequelize, Operation, Category } = require('../models');
+const { responseCodes } = require('../config/constants');
 const { ValidationError } = require('sequelize');
 
 /**
@@ -96,10 +97,14 @@ exports.get = async function(req, res, next) {
         });
         
         if(operation === null)
-            return res.status(404).send("Not found");
+            return res
+                    .status(responseCodes.notFound.status)
+                    .json(responseCodes.notFound.details);
 
         if(operation.userId !== user.id) {
-            return res.status(401).send("Access denied");
+            return res
+                    .status(responseCodes.forbidden.status)
+                    .json(responseCodes.forbidden.details);
         }
 
         return res.json(operation);
@@ -118,10 +123,14 @@ exports.update = async function(req, res, next) {
         const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
-            return res.status(404).send("Not found");
+            return res
+                    .status(responseCodes.notFound.status)
+                    .json(responseCodes.notFound.details);
 
         if(operation.userId !== user.id)
-            return res.status(401).send("Access denied");
+            return res
+                    .status(responseCodes.forbidden.status)
+                    .json(responseCodes.forbidden.details);
 
         const { concept, amount, date, categoryName } = req.body;
 
@@ -159,11 +168,15 @@ exports.delete = async function(req, res, next) {
         const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
-            return res.status(404).send("Not found");
+            return res
+                    .status(responseCodes.notFound.status)
+                    .json(responseCodes.notFound.details);
 
         // Prevent authenticated user from modifying records that belong to another user
         if(operation.userId !== user.id) {
-            return res.status(401).send("Access denied");
+            return res
+                    .status(responseCodes.forbidden.status)
+                    .json(responseCodes.forbidden.details);
         }
 
         await operation.destroy();

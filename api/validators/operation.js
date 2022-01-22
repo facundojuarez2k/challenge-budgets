@@ -1,6 +1,7 @@
 'use strict';
 
 const {check, validationResult} = require('express-validator');
+const { responseCodes } = require('../config/constants');
 
 const basicValidator = [
     check('concept')
@@ -37,7 +38,12 @@ exports.createOperationValidator = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())
-            return res.status(422).json({errors: errors.array()});
+            return res
+                    .status(responseCodes.validationError.status)
+                    .json({
+                        ...responseCodes.validationError.details,
+                        errors: errors.array()
+                    });
         next();
     },
 ];
@@ -47,7 +53,12 @@ exports.updateOperationValidator = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())
-            return res.status(422).json({errors: errors.array()});
+            return res
+                    .status(responseCodes.validationError.status)
+                    .json({
+                        ...responseCodes.validationError.details,
+                        errors: errors.array()
+                    });
         next();
     },
 ];
