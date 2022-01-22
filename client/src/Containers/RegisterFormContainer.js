@@ -1,30 +1,30 @@
 import { useState } from 'react';
-import { authenticateUser } from '../Services/auth';
-import API from '../Services/requests';
+import { createUser } from '../Services/auth';
 import RegisterForm from '../Components/RegisterForm';
-import { api } from '../Config/constants';
 
-function RegisterFormContainer({ onAuthenticated }) {
-    const [loginErrors, setLoginErrors] = useState([]);
+function RegisterFormContainer({ onSuccess }) {
+    const [errorMessage, setErrorMessage] = useState([]);
+    const [invalidFields, setInvalidFields] = useState({});
 
     async function handleRegister(data) {
+        setInvalidFields([]);
         try {
-            setLoginErrors([]);
-            const res = await API.post(api.URL_USERS, data)
-
-            console.log(res);
-        } catch(error) {
-            console.log(error)
-        }
+            const {success, loggedIn, errorMessage, invalidFields: _invalidFields} = await createUser(data);
+            if(success) {
+                onSuccess(loggedIn);
+            } else {
+                setErrorMessage(errorMessage);
+                setInvalidFields(_invalidFields);
+            }
+        } finally {}
     }
 
     return (
-        <div>
-            <RegisterForm 
-                onSubmit={ (data) => handleRegister(data) }
-                errors={loginErrors}
-            />
-        </div>
+        <RegisterForm 
+            onSubmit={ (data) => handleRegister(data) }
+            invalidFields={invalidFields}
+            errorMessage={errorMessage}
+        />
     )
 }
 

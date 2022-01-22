@@ -19,9 +19,11 @@ h1, h2, h3, h4, h5, h6, p {
 .form-wrapper {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 5px;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .form-wrapper .submit-errors {

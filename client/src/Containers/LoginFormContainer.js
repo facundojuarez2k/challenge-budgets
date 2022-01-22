@@ -18,13 +18,11 @@ function LoginFormContainer({ onAuthenticated }) {
         } finally {}
     }
 
-    return (
-        <div>
-            <LoginForm 
-                onSubmit={ (credentials) => handleLogin(credentials) }
-                errors={loginErrors}
-            />
-        </div>
+    return (    
+        <LoginForm 
+            onSubmit={ (credentials) => handleLogin(credentials) }
+            errors={loginErrors}
+        />
     )
 }
 

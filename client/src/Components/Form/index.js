@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import styles from './styles.module.css';
 
-function Form({fields: propsFields = {}, onSubmit, buttonText}) {
+function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields }) {
     const [isComponentMounted, setIsComponentMounted] = useState(false);
     const [fields, setFields] = useState({});
     const [errors, setErrors] = useState({});
@@ -16,6 +16,13 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     useEffect(() => {
         setFields(Object.assign(propsFields));
     }, [propsFields]);
+
+    // Add field validation errors passed from the parent component
+    useEffect(() => {
+        if(invalidFields && (Object.keys(invalidFields).length > 0)) {
+            setErrors(invalidFields);
+        }
+    }, [invalidFields]);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -37,18 +44,18 @@ function Form({fields: propsFields = {}, onSubmit, buttonText}) {
     }
 
     function validateFields() {
-        const invalidFields = {};
+        const _invalidFields = {};
         let invalidCount = 0;
 
         for(const key in fields) {
             if(fields[key].required === true && fields[key].value === "") {
-                invalidFields[key] = "This field is required";
+                _invalidFields[key] = "This field is required";
                 invalidCount++;
             } else {
-                invalidFields[key] = "";
+                _invalidFields[key] = "";
             }
         }
-        setErrors(invalidFields);
+        setErrors(_invalidFields);
         
         return invalidCount === 0;
     }

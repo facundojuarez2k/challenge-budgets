@@ -8,5 +8,6 @@ export const api = Object.freeze({
     URL_AUTH_TOKEN: "/auth/token",
     URL_OPERATIONS: "/operations",
     URL_OPERATIONS_BALANCE: "/operations/balance",
-    URL_USERS: "/users"
+    URL_USERS: "/users",
+    ERRCOD_VALIDATIONERR: "ERRVAL001",
 });

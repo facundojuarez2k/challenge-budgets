@@ -37,17 +37,15 @@ function App() {
 	return (
 		<div className={styles.App}>
 			{
-				(isLoading === true)
-				?
-					<div>Loading...</div>
-				: null
+				(isLoading === true) && <div>Loading...</div>
 			}
 			{
 				(isAuthenticated === false)
 				?
 					showLoginForm
 					?
-						<div className={styles.formContainer}>
+						/* Login form */
+						<div className={`${styles.formContainer}`}>
 							<h1 className="brand lg">QuickBudget</h1>
 							<LoginFormContainer 
 								onAuthenticated={() => { setIsAuthenticated(true) }}
@@ -61,10 +59,16 @@ function App() {
 							</button>
 						</div>
 					:
+						/* Register form */
 						<div className={styles.formContainer}>
 							<h1 className="brand lg">QuickBudget</h1>
 							<RegisterFormContainer 
-								onSuccess={() => { setIsAuthenticated(true) }}
+								// Callback to execute after successfully registering 
+								onSuccess={ function(loggedIn = false) { 
+										setIsAuthenticated(loggedIn);
+										setShowLoginForm(true);
+									} 
+								}
 							/>
 							<button 
 								className="button orangeBtn"

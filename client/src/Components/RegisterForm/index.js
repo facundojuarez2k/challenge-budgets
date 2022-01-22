@@ -1,23 +1,8 @@
 import { useState, useEffect } from 'react';
 import Form from '../Form';
 
-function RegisterForm({ onSubmit, errors = [] }) {
-    const [errorList, setErrorList] = useState(null);
-
-    useEffect(() => {
-        if(errors && errors.length > 0) {
-            setErrorList(
-                <div className="submit-errors">
-                    {
-                        errors.map((errMsg, index) => <span key={index}>{errMsg}</span>)
-                    }
-                </div>
-            );
-        } else {
-            setErrorList(null);
-        }
-    }, [errors]);
-
+function RegisterForm({ onSubmit, errorMessage, invalidFields }) {
+    
     const fields = {
         email: {
             type: "email",
@@ -38,8 +23,15 @@ function RegisterForm({ onSubmit, errors = [] }) {
     return (
         <div className="form-wrapper">
             <h1>Sign up</h1>
-            <Form fields={fields} onSubmit={onSubmit} buttonText={"Register"} />
-            {errorList}
+            <Form 
+                fields={fields} 
+                onSubmit={onSubmit} 
+                buttonText={"Register"} 
+                invalidFields={invalidFields} 
+            />
+            {
+                (errorMessage?.length > 0) && <div className="submit-errors">{errorMessage}</div>
+            }
         </div>
     );
 }

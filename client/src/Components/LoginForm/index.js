@@ -1,22 +1,6 @@
-import { useState, useEffect } from 'react';
 import Form from '../Form';
 
-function LoginForm({ onSubmit, errors = [] }) {
-    const [errorList, setErrorList] = useState(null);
-
-    useEffect(() => {
-        if(errors && errors.length > 0) {
-            setErrorList(
-                <div className="submit-errors">
-                    {
-                        errors.map((errMsg, index) => <span key={index}>{errMsg}</span>)
-                    }
-                </div>
-            );
-        } else {
-            setErrorList(null);
-        }
-    }, [errors]);
+function LoginForm({ onSubmit, errorMessage, invalidFields = {} }) {
 
     const fields = {
         email: {
@@ -38,8 +22,15 @@ function LoginForm({ onSubmit, errors = [] }) {
     return (
         <div className="form-wrapper">
             <h1>Sign in</h1>
-            <Form fields={fields} onSubmit={onSubmit} buttonText={"Login"} />
-            {errorList}
+            <Form 
+                fields={fields} 
+                onSubmit={onSubmit} 
+                buttonText={"Login"} 
+                invalidFields={invalidFields}
+            />
+            {
+                (errorMessage?.length > 0) && <div className="submit-errors">{errorMessage}</div>
+            }
         </div>
     );
 }
