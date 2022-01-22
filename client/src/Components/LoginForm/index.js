@@ -38,7 +38,7 @@ function LoginForm({ onSubmit, errors = [] }) {
 
     return (
         <div className="form-wrapper">
-            <span className="title2">Sign in</span>
+            <h1>Sign in</h1>
             <Form fields={fields} onSubmit={onSubmit} buttonText={"Login"} />
             {errorList}
         </div>

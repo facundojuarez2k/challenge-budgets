@@ -30,21 +30,26 @@ function App() {
 
 	return (
 		<div className={styles.App}>
-			<main className="container">
-				{
-					(isLoading === true)
-					?
-						<span>Loading...</span>
-					:  
-					(isAuthenticated === false)
-					? 
+			{
+				(isLoading === true)
+				?
+					<div>Loading...</div>
+				: null
+			}
+			{
+				(isAuthenticated === false)
+				?
+					<div className={styles.formContainer}>
+						<h1 className="brand lg">QuickBudget</h1>
 						<LoginFormContainer 
 							onAuthenticated={() => { setIsAuthenticated(true) }}
 						/>
-					: 
-						<OperationsContainer />
-				}
-			</main>
+					</div>
+				:
+				<main className="container">
+					<OperationsContainer />
+				</main>
+			}
 		</div>
 	);
 }
