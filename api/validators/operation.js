@@ -6,8 +6,8 @@ const basicValidator = [
     check('concept')
         .trim()
         .escape()
-        .isLength({min:0 , max:255})
-        .withMessage('Max length: 255'),
+        .isLength({min:0 , max:60})
+        .withMessage('Max length: 60 characters'),
     check('amount')
         .trim()
         .escape()

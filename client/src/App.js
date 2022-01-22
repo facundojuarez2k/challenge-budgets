@@ -35,7 +35,7 @@ function App() {
 				<a href="#">Register operation</a>
 				<div className={styles.search}>
 					<input type="search" />
-					<button><img src={searchLogo} /></button>
+					<button><img src={searchLogo} alt="Search button icon" /></button>
 				</div>
 			</nav>
 			<main className="container">
