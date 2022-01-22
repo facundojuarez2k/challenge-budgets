@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Form from '../Form';
 
 function RegisterForm({ onSubmit, errorMessage, invalidFields }) {

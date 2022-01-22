@@ -1,8 +1,6 @@
 import API from './requests';
 
-import {ls, api} from '../Config/constants'; {
-
-}
+import {ls, api, apiErrors} from '../Config/constants';
 
 /* Map the errors array to an object containing a key-value pair where the key
     is the field name and the value is the error message
@@ -47,7 +45,7 @@ export async function authenticateUser(credentials = {}) {
         if(err.response && err.response.data) {
             msg = err.response.data.message;
             
-            if(err.response.data.code === api.ERRCOD_VALIDATIONERR && err.response.data.errors) {
+            if(err.response.data.code === apiErrors.ERRCOD_VALIDATION && err.response.data.errors) {
                 result.invalidFields = _validationArrayToObject(err.response.data.errors);
             }
         }
@@ -81,7 +79,7 @@ export async function createUser(userInfo = {}) {
         if(err.response && err.response.data) {
             msg = err.response.data.message;
             
-            if(err.response.data.code === api.ERRCOD_VALIDATIONERR && err.response.data.errors) {
+            if(err.response.data.code === apiErrors.ERRCOD_VALIDATION && err.response.data.errors) {
                 result.invalidFields = _validationArrayToObject(err.response.data.errors);
             }
         }

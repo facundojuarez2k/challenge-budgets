@@ -9,5 +9,14 @@ export const api = Object.freeze({
     URL_OPERATIONS: "/operations",
     URL_OPERATIONS_BALANCE: "/operations/balance",
     URL_USERS: "/users",
-    ERRCOD_VALIDATIONERR: "ERRVAL001",
+});
+
+export const apiErrors = Object.freeze({
+    ERRCOD_VALIDATION: "ERRVAL001",
+    ERRCOD_NOT_FOUND: "RSRC001",
+    ERRCOD_ALREADY_EXISTS: "RSRC002",
+    ERRCOD_FORBIDDEN: "ACC001",
+    ERRCOD_INVALID_TOKEN: "AUTH001",
+    ERRCOD_INVALID_USERID: "AUTH002",
+    ERRCOD_INVALID_CREDENTIALS: "AUTH003",
 });
