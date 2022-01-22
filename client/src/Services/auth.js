@@ -31,25 +31,31 @@ export async function isUserAuthenticated() {
 }
 
 export async function authenticateUser(credentials = {}) {
+    const result = {
+        success: false,
+        errorMessage: "",
+        invalidFields: {}
+    };
+
     try {
         const {data} = await API.post(api.URL_AUTH_TOKEN, credentials);
-        
         localStorage.setItem(ls.BEARER_TOKEN_KEY, data.token);
-        
-        return {
-            success: true
-        };
+        result.success = true;
     } catch(err) {
         let msg = "Failed to authenticate";
         
-        if(err.response.status === 422 || err.response.status === 400)
+        if(err.response && err.response.data) {
             msg = err.response.data.message;
-        
-            return {
-            success: false,
-            errorMessage: msg
-        };
+            
+            if(err.response.data.code === api.ERRCOD_VALIDATIONERR && err.response.data.errors) {
+                result.invalidFields = _validationArrayToObject(err.response.data.errors);
+            }
+        }
+
+        result.errorMessage = msg;
     }
+
+    return result;
 }
 
 export async function createUser(userInfo = {}) {

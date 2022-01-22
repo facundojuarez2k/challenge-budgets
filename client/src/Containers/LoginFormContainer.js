@@ -3,17 +3,19 @@ import { authenticateUser } from '../Services/auth';
 import LoginForm from '../Components/LoginForm';
 
 function LoginFormContainer({ onAuthenticated }) {
-    const [loginErrors, setLoginErrors] = useState([]);
+    const [errorMessage, setErrorMessage] = useState([]);
+    const [invalidFields, setInvalidFields] = useState({});
 
     async function handleLogin(credentials) {
+        setInvalidFields([]);
         try {
-            setLoginErrors([]);
-            const {success, errorMessage} = await authenticateUser(credentials);
+            const {success, errorMessage, invalidFields: _invalidFields} = await authenticateUser(credentials);
 
             if(success) {
                 onAuthenticated();
             } else {
-                setLoginErrors([errorMessage]);
+                setErrorMessage(errorMessage);
+                setInvalidFields(_invalidFields);
             }
         } finally {}
     }
@@ -21,7 +23,8 @@ function LoginFormContainer({ onAuthenticated }) {
     return (    
         <LoginForm 
             onSubmit={ (credentials) => handleLogin(credentials) }
-            errors={loginErrors}
+            invalidFields={invalidFields}
+            errorMessage={errorMessage}
         />
     )
 }
