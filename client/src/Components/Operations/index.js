@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Modal from '../Modal';
 import moment from 'moment';
 import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
@@ -8,6 +9,7 @@ function Operations({data = []}) {
     const [isComponentMounted, setIsComponentMounted] = useState(false);
     const [allowRowClick, setAllowRowClick] = useState(true);
     const [shownRows, setShownRows] = useState([]);
+    const [showAddOperationModal, setShowAddOperationModal] = useState(false);
     const CLICK_INTERVAL = 500;
 
     useEffect(() => {
@@ -41,6 +43,9 @@ function Operations({data = []}) {
 
     return(
         <div className={styles.wrapper}>
+            <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
+                
+            </Modal>
 
             <nav className={styles.nav}>
                 <div className={styles.search}>
@@ -48,7 +53,14 @@ function Operations({data = []}) {
 					<button><img src={searchLogo} alt="Search button icon" /></button>
 				</div>
                 <ul className={styles.buttons}>
-                    <li><button className="button greenBtn">Add</button></li>
+                    <li>
+                        <button 
+                            className="button greenBtn" 
+                            onClick={() => setShowAddOperationModal(true)}
+                        >
+                            Add
+                        </button>
+                    </li>
                 </ul>
 			</nav>
 
