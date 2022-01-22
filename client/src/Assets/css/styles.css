@@ -78,6 +78,15 @@ button {
     box-shadow: 0px 0px 5px #289c1d;
 }
 
+.orangeBtn {
+    border: 1px solid #ff7b00;
+    color: #ff7b00;
+}
+
+.orangeBtn:focus {
+    box-shadow: 0px 0px 5px #ff7b00;
+}
+
 .brand {
     font-family: 'Lobster', cursive;
     color: #2699ab;

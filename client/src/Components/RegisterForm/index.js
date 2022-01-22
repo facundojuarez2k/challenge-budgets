@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Form from '../Form';
 
-function LoginForm({ onSubmit, errors = [] }) {
+function RegisterForm({ onSubmit, errors = [] }) {
     const [errorList, setErrorList] = useState(null);
 
     useEffect(() => {
@@ -37,11 +37,11 @@ function LoginForm({ onSubmit, errors = [] }) {
 
     return (
         <div className="form-wrapper">
-            <h1>Sign in</h1>
-            <Form fields={fields} onSubmit={onSubmit} buttonText={"Login"} />
+            <h1>Sign up</h1>
+            <Form fields={fields} onSubmit={onSubmit} buttonText={"Register"} />
             {errorList}
         </div>
     );
 }
 
-export default LoginForm;
+export default RegisterForm;
