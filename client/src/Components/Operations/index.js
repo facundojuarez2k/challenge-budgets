@@ -5,11 +5,17 @@ import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
 import '../../Assets/css/styles.css';
 
-function Operations({data = []}) {
+function Operations({ data = [], applyFilters }) {
+    const defaultFilters = {
+        search: "",
+        limit: "",
+    }
+
     const [isComponentMounted, setIsComponentMounted] = useState(false);
     const [allowRowClick, setAllowRowClick] = useState(true);
     const [shownRows, setShownRows] = useState([]);
     const [showAddOperationModal, setShowAddOperationModal] = useState(false);
+    const [filters, setFilters] = useState({...defaultFilters});
     const CLICK_INTERVAL = 500;
 
     useEffect(() => {
@@ -41,6 +47,20 @@ function Operations({data = []}) {
         }
     }
 
+    function onSearchFormSubmit(event) {
+        event.preventDefault();
+        applyFilters(filters);
+    }
+
+    function onSearchInputChange(event) {
+        setFilters(prev => {
+            return {
+                ...prev,
+                [event.target.name]: event.target.value
+            }
+        });
+    }
+
     return(
         <div className={styles.wrapper}>
             <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
@@ -48,10 +68,18 @@ function Operations({data = []}) {
             </Modal>
 
             <nav className={styles.nav}>
-                <div className={styles.search}>
-					<input type="search" />
-					<button><img src={searchLogo} alt="Search button icon" /></button>
-				</div>
+                <form 
+                    className={styles.search}
+                    onSubmit={onSearchFormSubmit}
+                >
+					<input 
+                        type="search"
+                        name="search"
+                        value={filters.search}
+                        onChange={onSearchInputChange}
+                    />
+					<button type="submit"><img src={searchLogo} alt="Search button icon" /></button>
+				</form>
                 <ul className={styles.buttons}>
                     <li>
                         <button 

@@ -10,17 +10,37 @@ function OperationsContainer() {
         fetchOperations();
     }, []);
 
-    async function fetchOperations() {
-        try {
-            const {data} = await API.get(apiConstants.URL_OPERATIONS);
-            setOperations(data);
-        } catch(err) {
-            // Handle error
+    function _buildFiltersQueryString(filters) {
+        let params = [];
+        for(const key in filters) {
+            const value = filters[key];
+            if(value && value !== "") {
+                params.push(`${key}=${value}`);
+            }
         }
+        const qs = params.join('&');
+
+        return qs;
+    }
+
+    async function fetchOperations(filters = {}) {
+        try {
+            const qs = _buildFiltersQueryString(filters);
+            const url = `${apiConstants.URL_OPERATIONS}?${qs}`;
+            const {data} = await API.get(url);
+            setOperations(data);
+        } catch(err) {}
+    }
+
+    async function applyFilters(filters) {
+        fetchOperations(filters);
     }
 
     return (
-        <Operations data={operations} />
+        <Operations 
+            data={operations} 
+            applyFilters={applyFilters}
+        />
     )
 }
 
