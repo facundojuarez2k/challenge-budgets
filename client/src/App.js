@@ -5,6 +5,7 @@ import './Assets/css/styles.css';
 import LoginFormContainer from './Containers/LoginFormContainer';
 import RegisterFormContainer from './Containers/RegisterFormContainer';
 import OperationsContainer from './Containers/OperationsContainer';
+import LoadingSpinner from './Components/LoadingSpinner';
 
 function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -36,9 +37,7 @@ function App() {
 
 	return (
 		<div className={styles.App}>
-			{
-				(isLoading === true) && <div>Loading...</div>
-			}
+			<LoadingSpinner show={isLoading} fullScreen={true} />
 			{
 				(isAuthenticated === false)
 				?
