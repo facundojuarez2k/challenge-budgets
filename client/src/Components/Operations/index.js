@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import styles from './styles.module.css';
+import searchLogo from '../../Assets/images/magnifying-glass.png';
+import '../../Assets/css/styles.css';
 
 function Operations({data = []}) {
     const [isComponentMounted, setIsComponentMounted] = useState(false);
@@ -39,6 +41,17 @@ function Operations({data = []}) {
 
     return(
         <div className={styles.wrapper}>
+
+            <nav className={styles.nav}>
+                <div className={styles.search}>
+					<input type="search" />
+					<button><img src={searchLogo} alt="Search button icon" /></button>
+				</div>
+                <ul className={styles.buttons}>
+                    <li><button className="button greenBtn">Add</button></li>
+                </ul>
+			</nav>
+
             <table className={`${styles.table} ${styles.desktop}`}>
                 <thead>
                     <tr>
@@ -47,6 +60,7 @@ function Operations({data = []}) {
                         <th>Category</th>
                         <th>Date</th>
                         <th>Type</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,6 +72,7 @@ function Operations({data = []}) {
                                 <td>{op.categoryName}</td>
                                 <td>{moment(op.date).format("MMM DD, YYYY")}</td>
                                 <td>{op.type === "IN" ? "Income" : "Expense"}</td>
+                                <td><button className="button blueBtn">Edit</button></td>
                             </tr>
                         ))
                     }
@@ -102,7 +117,7 @@ function Operations({data = []}) {
                                         <span>
                                             <strong>Type</strong>: {op.type === "IN" ? "Income" : "Expense"}
                                         </span>
-                                        <button className={styles.editButton}>Edit</button>
+                                        <button className="button blueBtn">Edit</button>
                                     </div>
                                 </td>
                             </tr>

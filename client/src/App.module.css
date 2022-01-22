@@ -4,50 +4,6 @@
   margin: 0;
 }
 
-.App nav {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  align-items: center;
-  padding-left: 25px;
-  padding-right: 25px;
-  height: 60px;
-  width: 100%;
-  background-color: #337ab7;
-  font-size: 1.2rem;
-  color: #fff;
-}
-
-.search {
-  position: relative;
-}
-
-.search input {
-  padding: 8px;
-  padding-right: 30px;
-  width: 200px;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 12px;
-}
-
-.search button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  width: 35px;
-  height: 37px;
-}
-
-.search button > img {
-  margin-top: 5px;
-  width: 20px;
-  height: 20px;
-}
-
 .App main {
   padding-top: 30px;
   padding-bottom: 30px;

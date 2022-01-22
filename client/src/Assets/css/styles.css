@@ -41,6 +41,38 @@ button {
     font-weight: bold;
 }
 
+.button {
+    border: 1px solid #4b4b4b;
+    color: #4b4b4b;
+    width: auto;
+    margin: 0;
+    padding: 5px 15px;
+    border-radius: 15px;
+    transition: all 150ms ease-in-out;
+}
+
+.button:hover {
+    opacity: .9;
+}
+
+.blueBtn {
+    border: 1px solid #2699ab;
+    color: #2699ab;
+}
+
+.blueBtn:focus {
+    box-shadow: 0px 0px 5px #2699ab;
+}
+
+.greenBtn {
+    border: 1px solid #289c1d;
+    color: #289c1d;
+}
+
+.greenBtn:focus {
+    box-shadow: 0px 0px 5px #289c1d;
+}
+
 @media (max-width: 700px) {
     .container {
         width: 100%;

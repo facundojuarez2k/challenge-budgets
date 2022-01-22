@@ -1,12 +1,16 @@
 .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
+    max-width: 900px;
+    gap: 30px;
 }
 
 .table {
     border-collapse: collapse;
     text-overflow: wrap;
     width: 100%;
-    max-width: 900px;
     word-wrap: break-word;
 }
 
@@ -60,25 +64,56 @@
     gap: 10px;
 }
 
-.table .editButton {
-    border: 1px solid #2699ab;
-    color: #2699ab;
-    width: auto;
+.nav {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+    font-size: 1.2rem;
+}
+
+.nav .buttons {
+    list-style: none;
+}
+  
+.nav .search {
+    position: relative;
+}
+
+.nav .search input {
+    padding: 8px;
+    padding-right: 35px;
+    width: 200px;
+    font-size: 1.1rem;
+    border: none;
+    border-bottom: 2px solid rgba(112, 112, 112);
+}
+
+.nav .search button {
+    position: absolute;
+    top: 0;
+    right: 0;
     margin: 0;
-    padding: 10px 15px;
-    border-radius: 15px;
-    transition: all 150ms ease-in-out;
+    border: 0;
+    padding: 0;
+    width: 35px;
+    height: 37px;
 }
 
-.table .editButton:hover {
-    opacity: .9;
+.nav .search input:focus {
+    outline: none;
 }
 
-.table .editButton:focus {
-    box-shadow: 0 0 3px #2699ab;
+.nav .search button > img {
+    margin-top: 5px;
+    width: 20px;
+    height: 20px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 650px) {
     .table.desktop {
         display: table;
     }
