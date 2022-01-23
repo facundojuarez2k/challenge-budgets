@@ -51,3 +51,14 @@
 .form button:focus {
     box-shadow: 0 0 5px #5BC0DE;
 }
+
+.radioButtonGroup {
+    display: flex;
+    flex-direction: row;
+    margin-top: 3px;
+    gap: 5px;
+}
+
+.radioButtonGroup input[type="radio"]{
+    width: 15px;
+}

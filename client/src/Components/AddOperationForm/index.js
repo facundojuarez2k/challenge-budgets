@@ -25,8 +25,17 @@ function AddOperationForm({ onSubmit, errorMessage, invalidFields = {} }) {
             value: ""
         },
         type: {
-            type: "text",
-            placeholder: "Type",
+            type: "radio",
+            options: [
+                {
+                    label: "Income",
+                    value: "IN"
+                },
+                {
+                    label: "Expense",
+                    value: "OUT"
+                }
+            ],
             label: "Type",
             required: true,
             value: ""

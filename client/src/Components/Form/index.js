@@ -78,28 +78,56 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
         <form className={styles.form}>
             {
                 fields && Object.keys(fields).map((fieldKey, index) => {
+
+                    let inputElement;
+                    const fieldType = fields[fieldKey].type;
+
+                    if(fieldType === "textarea") {
+                        inputElement = (
+                            <textarea
+                                name={fieldKey}
+                                value={fields[fieldKey].value}
+                                onChange={onInputChange}
+                            />
+                        );
+                    } else if(fieldType === "radio") {
+                        inputElement = (
+                            <div key={index} onChange={onInputChange}>
+                                { 
+                                    fields[fieldKey].options.map((option, index) => {
+                                        return (
+                                            <div key={`option_${index}`} className={styles.radioButtonGroup}>
+                                                <input
+                                                    name={fieldKey}
+                                                    type="radio"
+                                                    value={option.value}
+                                                    defaultChecked={index===0}
+                                                />
+                                                <label>{option.label}</label>
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </div>
+                        )
+                    } else {
+                        inputElement = (
+                            <input
+                                name={fieldKey}
+                                type={fields[fieldKey].type} 
+                                value={fields[fieldKey].value}
+                                placeholder={fields[fieldKey].placeholder}
+                                onChange={onInputChange}
+                            />
+                        );
+                    }
+
                     return (
                         <div key={index} className={styles.inputGroup}>
 
                             <label>{ fields[fieldKey].label || fieldKey }</label>
-
-                            {
-                                fields[fieldKey].type === "textarea" 
-                                ?
-                                <textarea
-                                    name={fieldKey}
-                                    value={fields[fieldKey].value}
-                                    onChange={onInputChange}
-                                />
-                                :
-                                <input
-                                    name={fieldKey}
-                                    type={fields[fieldKey].type} 
-                                    value={fields[fieldKey].value}
-                                    placeholder={fields[fieldKey].placeholder}
-                                    onChange={onInputChange}
-                                />
-                            }
+                            {inputElement}
+                            
                             {
                                 (errors[fieldKey] && errors[fieldKey].length > 0)
                                 ?
