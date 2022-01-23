@@ -6,7 +6,7 @@ import searchLogo from '../../Assets/images/magnifying-glass.png';
 import AddOperationForm from '../AddOperationForm';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters, addOperationFormData }) {
+function Operations({ data = [], applyFilters, addOperationFormProps = {} }) {
     const defaultFilters = {
         search: ""
     }
@@ -65,8 +65,7 @@ function Operations({ data = [], applyFilters, addOperationFormData }) {
         <div className={styles.wrapper}>
             <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
                 <AddOperationForm 
-                    //onSubmit={addOperationFormData?.onSubmit}
-                    onSubmit={(values) => console.log(values)}
+                    {...addOperationFormProps}
                 />
             </Modal>
 

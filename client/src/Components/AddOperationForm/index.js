@@ -38,7 +38,7 @@ function AddOperationForm({ onSubmit, errorMessage, invalidFields = {} }) {
             ],
             label: "Type",
             required: true,
-            value: ""
+            value: "IN" // Default
         },
         date: {
             type: "date",

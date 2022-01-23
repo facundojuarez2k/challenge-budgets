@@ -92,7 +92,7 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
                         );
                     } else if(fieldType === "radio") {
                         inputElement = (
-                            <div key={index} onChange={onInputChange}>
+                            <div key={index}>
                                 { 
                                     fields[fieldKey].options.map((option, index) => {
                                         return (
@@ -101,7 +101,8 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
                                                     name={fieldKey}
                                                     type="radio"
                                                     value={option.value}
-                                                    defaultChecked={index===0}
+                                                    checked={fields[fieldKey].value === option.value}
+                                                    onChange={onInputChange}
                                                 />
                                                 <label>{option.label}</label>
                                             </div>

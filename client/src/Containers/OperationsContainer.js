@@ -57,10 +57,21 @@ function OperationsContainer() {
         fetchOperations(filters);
     }
 
+    async function createOperation(data) {
+        console.log(data);
+    }
+
     return (
         <Operations 
             data={operations} 
             applyFilters={applyFilters}
+            addOperationFormProps={
+                {
+                    onSubmit: (data) => createOperation(data),
+                    errorMessage: "", 
+                    invalidFields: {}
+                }
+            }
         />
     )
 }
