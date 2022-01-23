@@ -15,7 +15,7 @@ function OperationsContainer() {
 
     async function fetch(filters = null) {
         try {
-            const {operations, success, errorMessage} = await fetchOperations();
+            const {operations, success, errorMessage} = await fetchOperations(filters);
             
             if(success) 
                 setOperations(operations);
@@ -24,7 +24,7 @@ function OperationsContainer() {
         } catch(err) {}
     }
 
-    async function applyFilters(filters) {
+    function applyFilters(filters) {
         fetch(filters);
     }
 
