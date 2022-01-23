@@ -1,6 +1,6 @@
 import Form from '../Form';
 
-function EditOperationForm({ currentValues, onSubmit, errorMessage, invalidFields = {} }) {
+function EditOperationForm({ instance = {}, onSubmit, errorMessage = "", invalidFields = {} }) {
 
     const fields = {
         amount: {
@@ -8,28 +8,28 @@ function EditOperationForm({ currentValues, onSubmit, errorMessage, invalidField
             placeholder: "Amount",
             label: "Amount",
             required: true,
-            value: currentValues.amount
+            value: instance.amount
         },
         concept: {
             type: "text",
             placeholder: "Concept",
             label: "Concept",
             required: false,
-            value: currentValues.concept
+            value: instance.concept
         },
         categoryName: {
             type: "text",
             placeholder: "Category",
             label: "Category",
             required: false,
-            value: currentValues.categoryName
+            value: instance.categoryName
         },
         date: {
             type: "date",
             placeholder: "Date",
             label: "Date",
             required: false,
-            value: currentValues.date
+            value: instance.date
         }
     };
 

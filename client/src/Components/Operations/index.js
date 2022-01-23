@@ -4,7 +4,7 @@ import moment from 'moment';
 import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
 import AddOperationFormContainer from '../../Containers/AddOperationFormContainer';
-import EditOperationForm from '../EditOperationForm';
+import EditOperationFormContainer from '../../Containers/EditOperationFormContainer';
 import '../../Assets/css/styles.css';
 
 function Operations({ data = [], applyFilters, errorMessage }) {
@@ -17,7 +17,7 @@ function Operations({ data = [], applyFilters, errorMessage }) {
     const [shownRows, setShownRows] = useState([]);
     const [showAddOperationModal, setShowAddOperationModal] = useState(false);
     const [showEditOperationModal, setShowEditOperationModal] = useState(false);
-    const [editOperationFormElem, setEditOperationFormElem] = useState(null);
+    const [operationSelectedForUpdate, setOperationSelectedForUpdate] = useState(null);
     const [filters, setFilters] = useState({...defaultFilters});
     const CLICK_INTERVAL = 500;
 
@@ -64,15 +64,8 @@ function Operations({ data = [], applyFilters, errorMessage }) {
         });
     }
 
-    function onEditOperation(id) {
-        const operation = data.find(op => op.id === id);
-        if(operation) {
-            
-        }
-    }
-
-    function handleEditButton(id) {
-        onEditOperation(id);
+    function handleEditButton(instance) {
+        setOperationSelectedForUpdate(instance);
         setShowEditOperationModal(true);
     }
 
@@ -81,22 +74,28 @@ function Operations({ data = [], applyFilters, errorMessage }) {
             
             {   // Add operation pop up form
                 showAddOperationModal &&
-                <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
+                <Modal title="Add Operation" 
+                    onHide={() => setShowAddOperationModal(false)} 
+                    show={showAddOperationModal}
+                >
                     <AddOperationFormContainer />
                 </Modal>
-            }            
+            }
 
-            <Modal 
-                title="Edit Operation" 
-                onHide={() => {
-                        setShowEditOperationModal(false);
-                        setEditOperationFormElem(null);
-                    }
-                } 
-                show={showEditOperationModal}
-            >
-                {editOperationFormElem}
-            </Modal>
+            {  // Edit operation pop up form
+                showEditOperationModal &&
+                <Modal title="Edit Operation" 
+                    onHide={() => setShowEditOperationModal(false)} 
+                    show={showEditOperationModal}
+                >
+                    <EditOperationFormContainer 
+                        operation={operationSelectedForUpdate}
+                        onSuccess={
+                            () => { setShowEditOperationModal(false) }
+                        }
+                    />
+                </Modal>
+            }
 
             <nav className={styles.nav}>
                 <ul className={styles.filters}>
@@ -152,7 +151,7 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                                 <td>
                                     <button 
                                         className="button blueBtn"
-                                        onClick={() => handleEditButton(op.id)}
+                                        onClick={() => handleEditButton(op)}
                                     >
                                         Edit
                                     </button>
@@ -201,7 +200,12 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                                         <span>
                                             <strong>Type</strong>: {op.type === "IN" ? "Income" : "Expense"}
                                         </span>
-                                        <button className="button blueBtn">Edit</button>
+                                        <button 
+                                            className="button blueBtn"
+                                            onClick={() => handleEditButton(op)}
+                                        >
+                                            Edit
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

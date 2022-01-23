@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import styles from './styles.module.css';
+import moment from 'moment';
 
 function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields }) {
     const [isComponentMounted, setIsComponentMounted] = useState(false);
@@ -13,16 +14,30 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
         return () => { setIsComponentMounted(false) };
     }, []);
 
-    useEffect(() => {
-        setFields(Object.assign(propsFields));
-    }, [propsFields]);
-
     // Add field validation errors passed from the parent component
     useEffect(() => {
         if(invalidFields && (Object.keys(invalidFields).length > 0)) {
             setErrors(invalidFields);
         }
     }, [invalidFields]);
+
+    useEffect(() => {
+        handlePropsFields(propsFields);
+    }, [propsFields]);
+
+    function handlePropsFields() {
+        const flds = {};
+        
+        for(const key in propsFields) {
+
+            flds[key] = {...propsFields[key]}
+
+            if(propsFields[key].type === "date") {  // Convert date to a format accepted by date input type
+                flds[key].value = moment(propsFields[key].value).format("YYYY-MM-DD");
+            }
+        }
+        setFields(flds);
+    }
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -80,28 +95,28 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
                 fields && Object.keys(fields).map((fieldKey, index) => {
 
                     let inputElement;
-                    const fieldType = fields[fieldKey].type;
+                    const field = fields[fieldKey];
 
-                    if(fieldType === "textarea") {
+                    if(field.type === "textarea") {
                         inputElement = (
                             <textarea
                                 name={fieldKey}
-                                value={fields[fieldKey].value}
+                                value={field.value}
                                 onChange={onInputChange}
                             />
                         );
-                    } else if(fieldType === "radio") {
+                    } else if(field.type === "radio") {
                         inputElement = (
                             <div key={index}>
                                 { 
-                                    fields[fieldKey].options.map((option, index) => {
+                                    field.options.map((option, index) => {
                                         return (
                                             <div key={`option_${index}`} className={styles.radioButtonGroup}>
                                                 <input
                                                     name={fieldKey}
                                                     type="radio"
                                                     value={option.value}
-                                                    checked={fields[fieldKey].value === option.value}
+                                                    checked={field.value === option.value}
                                                     onChange={onInputChange}
                                                 />
                                                 <label>{option.label}</label>
@@ -115,9 +130,9 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
                         inputElement = (
                             <input
                                 name={fieldKey}
-                                type={fields[fieldKey].type} 
-                                value={fields[fieldKey].value}
-                                placeholder={fields[fieldKey].placeholder}
+                                type={field.type} 
+                                value={field.value}
+                                placeholder={field.placeholder}
                                 onChange={onInputChange}
                             />
                         );
@@ -126,7 +141,7 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
                     return (
                         <div key={index} className={styles.inputGroup}>
 
-                            <label>{ fields[fieldKey].label || fieldKey }</label>
+                            <label>{ field.label || fieldKey }</label>
                             {inputElement}
                             
                             {

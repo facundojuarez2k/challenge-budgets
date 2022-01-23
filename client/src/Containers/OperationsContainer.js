@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import API from '../Services/requests';
-import { fetchOperations, updateOperation } from '../Services/operations';
+import { fetchOperations } from '../Services/operations';
 import Operations from '../Components/Operations';
 import { useOperationsContext } from '../Context/Operations';
 
