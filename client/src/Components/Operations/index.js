@@ -7,7 +7,7 @@ import AddOperationFormContainer from '../../Containers/AddOperationFormContaine
 import EditOperationFormContainer from '../../Containers/EditOperationFormContainer';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters, errorMessage }) {
+function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }) {
     const defaultFilters = {
         search: ""
     }
@@ -67,6 +67,10 @@ function Operations({ data = [], applyFilters, errorMessage }) {
     function handleEditButton(instance) {
         setOperationSelectedForUpdate(instance);
         setShowEditOperationModal(true);
+    }
+
+    function handleDeleteButton(instance) {
+        onDeleteOperation(instance);
     }
 
     return(
@@ -148,12 +152,18 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                                 <td>{op.categoryName}</td>
                                 <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
                                 <td>{op.type === "IN" ? "Income" : "Expense"}</td>
-                                <td>
+                                <td className={styles.buttonsContainer}>
                                     <button 
                                         className="button blueBtn"
                                         onClick={() => handleEditButton(op)}
                                     >
                                         Edit
+                                    </button>
+                                    <button 
+                                        className="button redBtn"
+                                        onClick={() => handleDeleteButton(op)}
+                                    >
+                                        Delete
                                     </button>
                                 </td>
                             </tr>
@@ -197,15 +207,26 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                                         <span>
                                             <strong>Category</strong>: {op.categoryName}
                                         </span>
+
                                         <span>
                                             <strong>Type</strong>: {op.type === "IN" ? "Income" : "Expense"}
                                         </span>
-                                        <button 
-                                            className="button blueBtn"
-                                            onClick={() => handleEditButton(op)}
-                                        >
-                                            Edit
-                                        </button>
+
+                                        <div className={styles.buttonsContainer}>
+                                            <button 
+                                                className="button blueBtn"
+                                                onClick={() => handleEditButton(op)}
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button 
+                                                className="button redBtn"
+                                                onClick={() => handleDeleteButton(op)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

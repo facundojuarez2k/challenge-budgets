@@ -101,3 +101,25 @@ export async function updateOperation(id, formData) {
 
     return result;
 }
+
+export async function deleteOperation(id) {
+    const result = {
+        success: false,
+        errorMessage: ""
+    };
+
+    try {
+        const res = await API.delete(`${api.URL_OPERATIONS}/${id}`);
+        result.success = true;
+    } catch(err) {
+        let msg = "Failed to delete operation";
+        
+        if(err.response && err.response.data) {
+            msg = err.response.data.message;
+        }
+
+        result.errorMessage = msg;
+    }
+
+    return result;
+}

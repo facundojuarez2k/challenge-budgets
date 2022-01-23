@@ -32,10 +32,6 @@ h1, h2, h3, h4, h5, h6, p {
     font-size: 1.2em;
 }
 
-button {
-    cursor: pointer;
-}
-
 .title1 {
     font-size: 3em;
 }
@@ -46,6 +42,10 @@ button {
 
 .bold {
     font-weight: bold;
+}
+
+button {
+    cursor: pointer;
 }
 
 .button {
@@ -87,6 +87,15 @@ button {
 
 .orangeBtn:focus {
     box-shadow: 0px 0px 5px #ff7b00;
+}
+
+.redBtn {
+    border: 1px solid #ff0505;
+    color: #ff0505;
+}
+
+.redBtn:focus {
+    box-shadow: 0px 0px 5px #ff0505;
 }
 
 .brand {
