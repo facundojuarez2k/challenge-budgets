@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createOperation } from '../Services/operations';
 import AddOperationForm from '../Components/AddOperationForm';
 import { useOperationsContext } from '../Context/Operations';
 
-function AddOperationFormContainer() {
+function AddOperationFormContainer({ onSuccess }) {
+    const [isComponentMounted, setIsComponentMounted] = useState(false);
     const { addOperation } = useOperationsContext();
     const [errorMessage, setErrorMessage] = useState("");
     const [invalidFields, setInvalidFields] = useState({});
+
+    useEffect(() => {
+        setIsComponentMounted(true);
+        return () => { setIsComponentMounted(false) };
+    }, []);
 
     async function onSubmitForm(data) {
         try {
@@ -14,10 +20,13 @@ function AddOperationFormContainer() {
             
             if(success) {
                 addOperation(newOperation);
+                onSuccess();
             }
 
-            setErrorMessage(errorMessage);
-            setInvalidFields(invalidFields);
+            if(isComponentMounted) {
+                setErrorMessage(errorMessage);
+                setInvalidFields(invalidFields);
+            }
         } catch(err) {}
     }
 

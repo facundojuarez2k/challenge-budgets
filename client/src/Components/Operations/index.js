@@ -78,7 +78,9 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                     onHide={() => setShowAddOperationModal(false)} 
                     show={showAddOperationModal}
                 >
-                    <AddOperationFormContainer />
+                    <AddOperationFormContainer 
+                        onSuccess={ () => setShowAddOperationModal(false) }
+                    />
                 </Modal>
             }
 
@@ -90,9 +92,7 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                 >
                     <EditOperationFormContainer 
                         operation={operationSelectedForUpdate}
-                        onSuccess={
-                            () => { setShowEditOperationModal(false) }
-                        }
+                        onSuccess={ () => setShowEditOperationModal(false) }
                     />
                 </Modal>
             }

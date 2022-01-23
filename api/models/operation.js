@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       values: ['IN', 'OUT']
     },
     date: {
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     }
   }, {
     sequelize,
