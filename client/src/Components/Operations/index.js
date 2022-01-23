@@ -7,7 +7,7 @@ import AddOperationFormContainer from '../../Containers/AddOperationFormContaine
 import EditOperationForm from '../EditOperationForm';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters, addOperationFormProps = {}, editOperationFormProps = {} }) {
+function Operations({ data = [], applyFilters, errorMessage }) {
     const defaultFilters = {
         search: ""
     }
@@ -67,13 +67,7 @@ function Operations({ data = [], applyFilters, addOperationFormProps = {}, editO
     function onEditOperation(id) {
         const operation = data.find(op => op.id === id);
         if(operation) {
-            setEditOperationFormElem(
-                <EditOperationForm 
-                    {...editOperationFormProps}
-                    onSubmit={(data) => editOperationFormProps.onSubmit(id, data)}
-                    currentValues={operation}
-                />
-            );
+            
         }
     }
 

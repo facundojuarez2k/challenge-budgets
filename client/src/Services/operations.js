@@ -2,6 +2,48 @@ import API from './requests';
 import { api, apiErrors } from '../Config/constants';
 import { validationArrayToObject } from './utils';
 
+function _buildFiltersQueryString(filters) {
+    let params = [];
+    for(const key in filters) {
+        const value = filters[key];
+        if(value && value !== "") {
+            params.push(`${key}=${value}`);
+        }
+    }
+    const qs = params.join('&');
+
+    return qs;
+}
+
+export async function fetchOperations(filters = null, limit=10) {
+    const result = {
+        operations: [],
+        success: false,
+        errorMessage: "",
+    };
+    let url = api.URL_OPERATIONS + "?limit=" + limit;
+
+    if(filters !== null) {
+        const qs = _buildFiltersQueryString(filters);
+        url += "&" + qs;
+    }
+
+    try {
+        const {data} = await API.get(url);
+        result.success = true;
+        result.operations = data;
+    } catch(err) {
+        let msg = "Failed to fetch operations";
+        
+        if(err.response && err.response.data) {
+            msg = err.response.data.message;
+        }
+        result.errorMessage = msg;
+    }
+
+    return result;
+}
+
 export async function createOperation(formData) {
     const result = {
         newOperation: null,

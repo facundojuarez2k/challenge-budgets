@@ -1,95 +1,38 @@
 import { useEffect, useState } from 'react';
 import API from '../Services/requests';
-import { createOperation, updateOperation } from '../Services/operations';
+import { fetchOperations, updateOperation } from '../Services/operations';
 import Operations from '../Components/Operations';
-import { api as apiConstants } from '../Config/constants';
 import { useOperationsContext } from '../Context/Operations';
 
 function OperationsContainer() {
     const { operations, setOperations } = useOperationsContext();
     const [isComponentMounted, setIsComponentMounted] = useState(true);
-    const [editOperationFormProps, setEditOperationFormProps] = useState({
-        onSubmit: (id, data) => editOperation(id, data),
-        errorMessage: "", 
-        invalidFields: {},
-        currentValues: {}
-    });
-    let isFetching = false;
+    //const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {        
-        fetchOperations();
+        fetch();
         return () => { setIsComponentMounted(false) };
     }, []);
 
-    function _buildFiltersQueryString(filters) {
-        let params = [];
-        for(const key in filters) {
-            const value = filters[key];
-            if(value && value !== "") {
-                params.push(`${key}=${value}`);
-            }
-        }
-        const qs = params.join('&');
+    async function fetch(filters = null) {
+        try {
+            const {operations, success, errorMessage} = await fetchOperations();
+            
+            if(success) 
+                setOperations(operations);
 
-        return qs;
-    }
-
-    async function fetchOperations(filters = null) {
-        let url = apiConstants.URL_OPERATIONS + "?limit=10";
-
-        if(!isFetching) {
-            if(filters !== null) {
-                const qs = _buildFiltersQueryString(filters);
-                url += "&" + qs;
-            }
-
-            isFetching = true;
-    
-            try {
-                const {data} = await API.get(url);
-                
-                if(isComponentMounted)
-                    //setOperations(data);
-                    setOperations(data);
-    
-            } catch(err) {
-
-            } finally {
-                if(isComponentMounted) 
-                    isFetching = false;
-            }
-        }
+            // Alert error message
+        } catch(err) {}
     }
 
     async function applyFilters(filters) {
-        fetchOperations(filters);
-    }
-
-    async function editOperation(id, data) {
-        try {
-            const {updatedOperation, success, errorMessage, invalidFields} = await updateOperation(id, data);
-            
-            if(success) {
-                /*setOperations(prev => prev.map(function(op) {
-                    return (op.id === id) ? updatedOperation : op
-                }));*/
-            }
-
-            setEditOperationFormProps(prev => {
-                return {
-                    ...prev,
-                    errorMessage,
-                    invalidFields
-                }
-            });
-        } catch(err) {}
+        fetch(filters);
     }
 
     return (
         <Operations 
             data={operations} 
             applyFilters={applyFilters}
-            editOperationFormProps={editOperationFormProps}
         />
     )
 }
