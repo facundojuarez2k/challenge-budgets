@@ -3,7 +3,7 @@ import Modal from '../Modal';
 import moment from 'moment';
 import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
-import AddOperationForm from '../AddOperationForm';
+import AddOperationFormContainer from '../../Containers/AddOperationFormContainer';
 import EditOperationForm from '../EditOperationForm';
 import '../../Assets/css/styles.css';
 
@@ -84,11 +84,13 @@ function Operations({ data = [], applyFilters, addOperationFormProps = {}, editO
 
     return(
         <div className={styles.wrapper}>
-            <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
-                <AddOperationForm 
-                    {...addOperationFormProps}
-                />
-            </Modal>
+            
+            {   // Add operation pop up form
+                showAddOperationModal &&
+                <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
+                    <AddOperationFormContainer />
+                </Modal>
+            }            
 
             <Modal 
                 title="Edit Operation" 

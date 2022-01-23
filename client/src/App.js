@@ -6,6 +6,7 @@ import LoginFormContainer from './Containers/LoginFormContainer';
 import RegisterFormContainer from './Containers/RegisterFormContainer';
 import OperationsContainer from './Containers/OperationsContainer';
 import LoadingSpinner from './Components/LoadingSpinner';
+import { OperationsProvider } from './Context/Operations';
 
 function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -79,7 +80,9 @@ function App() {
 						</div>
 				:
 				<main className="container">
-					<OperationsContainer />
+					<OperationsProvider>
+						<OperationsContainer />
+					</OperationsProvider>
 				</main>
 			}
 		</div>

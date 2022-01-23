@@ -3,16 +3,11 @@ import API from '../Services/requests';
 import { createOperation, updateOperation } from '../Services/operations';
 import Operations from '../Components/Operations';
 import { api as apiConstants } from '../Config/constants';
-import { OperationsContext } from '../Context/Operations';
+import { useOperationsContext } from '../Context/Operations';
 
 function OperationsContainer() {
-    const [operations, setOperations] = useState([]);
+    const { operations, setOperations } = useOperationsContext();
     const [isComponentMounted, setIsComponentMounted] = useState(true);
-    const [addOperationFormProps, setAddOperationFormProps] = useState({
-        onSubmit: (data) => addOperation(data),
-        errorMessage: "", 
-        invalidFields: {}
-    });
     const [editOperationFormProps, setEditOperationFormProps] = useState({
         onSubmit: (id, data) => editOperation(id, data),
         errorMessage: "", 
@@ -23,7 +18,6 @@ function OperationsContainer() {
 
     useEffect(() => {        
         fetchOperations();
-        
         return () => { setIsComponentMounted(false) };
     }, []);
 
@@ -55,6 +49,7 @@ function OperationsContainer() {
                 const {data} = await API.get(url);
                 
                 if(isComponentMounted)
+                    //setOperations(data);
                     setOperations(data);
     
             } catch(err) {
@@ -70,36 +65,14 @@ function OperationsContainer() {
         fetchOperations(filters);
     }
 
-    async function addOperation(data) {
-        try {
-            const {newOperation, success, errorMessage, invalidFields} = await createOperation(data);
-            
-            if(success) {
-                setOperations(prev => {
-                    const newArray = prev.slice(0, prev.length-1);  // Copy all elements except the last one
-                    newArray.unshift(newOperation);                 // Insert new element at the start of the array
-                    return newArray;
-                });
-            }
-
-            setAddOperationFormProps(prev => {
-                return {
-                    ...prev,
-                    errorMessage,
-                    invalidFields
-                }
-            });
-        } catch(err) {}
-    }
-
     async function editOperation(id, data) {
         try {
             const {updatedOperation, success, errorMessage, invalidFields} = await updateOperation(id, data);
             
             if(success) {
-                setOperations(prev => prev.map(function(op) {
+                /*setOperations(prev => prev.map(function(op) {
                     return (op.id === id) ? updatedOperation : op
-                }));
+                }));*/
             }
 
             setEditOperationFormProps(prev => {
@@ -116,7 +89,6 @@ function OperationsContainer() {
         <Operations 
             data={operations} 
             applyFilters={applyFilters}
-            addOperationFormProps={addOperationFormProps}
             editOperationFormProps={editOperationFormProps}
         />
     )

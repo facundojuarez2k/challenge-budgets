@@ -29,7 +29,7 @@ export default (state, action) => {
             }
         case ADD_MANY_OPERATIONS:
             return {
-                operations: [...state.operations, ...action.payload.items]
+                operations: [...state.operations, ...action.payload]
             }
         case SET_OPERATIONS:
             return {
