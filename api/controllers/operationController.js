@@ -2,7 +2,7 @@
 
 const { sequelize, Operation, Category } = require('../models');
 const { responseCodes } = require('../config/constants');
-const { ValidationError } = require('sequelize');
+const { Sequelize, ValidationError } = require('sequelize');
 
 /**
  * Returns all Operation records associated with the authenticated user
@@ -13,6 +13,9 @@ exports.index = async function(req, res, next) {
         const q_limit = req.query.limit;
         const q_type = req.query.type;
         const q_category = req.query.category;
+        const q_sortBy = req.query.sortBy;
+        const q_sortOrder = (req.query.sortOrder === "ASC") ? "ASC" : "DESC";  // Descending order by default
+        const q_search = req.query.search || "";
         
         const queryOptions = {
             where: { userId: user.id },
@@ -35,6 +38,31 @@ exports.index = async function(req, res, next) {
         // Filter by category
         if(q_category) {
             queryOptions.where.categoryName = q_category
+        }
+
+        if(q_sortBy) {
+            // Check that q_sortBy contains a valid column name
+            if(Object.keys(Operation.rawAttributes).includes(q_sortBy)) {
+                queryOptions.order = [[q_sortBy, q_sortOrder]]
+            }
+        }
+
+        if(q_search && q_search.length > 0) {
+            const Op = Sequelize.Op
+            queryOptions.where[Op.or] = {
+                [Op.or]: [
+                    { 
+                        concept: { 
+                            [Op.like]: '%' + q_search + '%' 
+                        } 
+                    },
+                    { 
+                        categoryName: { 
+                            [Op.like]: '%' + q_search + '%' 
+                        } 
+                    },
+                ]
+            }
         }
 
         const operations = await Operation.findAll(queryOptions);
