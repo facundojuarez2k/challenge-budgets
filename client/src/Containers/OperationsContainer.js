@@ -15,7 +15,7 @@ function OperationsContainer() {
 
     async function fetch(filters = null) {
         try {
-            const {operations, success, errorMessage} = await fetchOperations(filters);
+            const {operations, success, errorMessage} = await fetchOperations(filters, 10);
             
             if(success) 
                 setOperations(operations);

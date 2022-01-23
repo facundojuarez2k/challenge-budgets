@@ -146,7 +146,7 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                                 <td>{op.type === "IN" ? "+" : "-"} ${op.amount}</td>
                                 <td>{op.concept}</td>
                                 <td>{op.categoryName}</td>
-                                <td>{moment(op.date).format("MMM DD, YYYY")}</td>
+                                <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
                                 <td>{op.type === "IN" ? "Income" : "Expense"}</td>
                                 <td>
                                     <button 
@@ -182,7 +182,7 @@ function Operations({ data = [], applyFilters, errorMessage }) {
                             >
                                 <td>{op.type === "IN" ? "+" : "-"} ${op.amount}</td>
                                 <td>{op.concept}</td>
-                                <td>{moment(op.date).format("MMM DD, YYYY")}</td>
+                                <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
                             </tr>,
                             <tr 
                                 key={`extra_${op.id}`} 

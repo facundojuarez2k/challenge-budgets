@@ -33,7 +33,7 @@ function Form({ fields: propsFields = {}, onSubmit, buttonText, invalidFields })
             flds[key] = {...propsFields[key]}
 
             if(propsFields[key].type === "date") {  // Convert date to a format accepted by date input type
-                flds[key].value = moment(propsFields[key].value).format("YYYY-MM-DD");
+                flds[key].value = moment(propsFields[key].value, "YYYY-MM-DD").format("YYYY-MM-DD");
             }
         }
         setFields(flds);
