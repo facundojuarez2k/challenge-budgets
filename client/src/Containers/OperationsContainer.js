@@ -5,9 +5,13 @@ import { api as apiConstants } from '../Config/constants';
 
 function OperationsContainer() {
     const [operations, setOperations] = useState([]);
+    const [isComponentMounted, setIsComponentMounted] = useState(true);
+    let isFetching = false;
 
-    useEffect(() => {
+    useEffect(() => {        
         fetchOperations();
+        
+        return () => { setIsComponentMounted(false) };
     }, []);
 
     function _buildFiltersQueryString(filters) {
@@ -23,13 +27,30 @@ function OperationsContainer() {
         return qs;
     }
 
-    async function fetchOperations(filters = {}) {
-        try {
-            const qs = _buildFiltersQueryString(filters);
-            const url = `${apiConstants.URL_OPERATIONS}?${qs}`;
-            const {data} = await API.get(url);
-            setOperations(data);
-        } catch(err) {}
+    async function fetchOperations(filters = null) {
+        let url = apiConstants.URL_OPERATIONS;
+
+        if(!isFetching) {
+            if(filters !== null) {
+                const qs = _buildFiltersQueryString(filters);
+                url += "?" + qs;
+            }
+
+            isFetching = true;
+    
+            try {
+                const {data} = await API.get(url);
+                
+                if(isComponentMounted)
+                    setOperations(data);
+    
+            } catch(err) {
+
+            } finally {
+                if(isComponentMounted) 
+                    isFetching = false;
+            }
+        }
     }
 
     async function applyFilters(filters) {
