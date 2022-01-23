@@ -17,7 +17,7 @@ const basicValidator = [
         .isDecimal({force_decimal: false, decimal_digits: '1,2'})
         .withMessage('Allowed format: xxxxxx.yy')
         .custom(value => {
-            return parseFloat(value) > 0;
+            return parseFloat(value) >= 0;
         })
         .withMessage('Negative values are not allowed'),
     check('date')

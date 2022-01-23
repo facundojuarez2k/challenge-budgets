@@ -147,7 +147,7 @@ function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }
                     {
                         data.map((op, index) => (
                             <tr key={op.id} className={op.type === "IN" ? styles.green : styles.red}>
-                                <td>{op.type === "IN" ? "+" : "-"} ${op.amount}</td>
+                                <td>{op.type === "IN" ? "+" : "-"} ${parseFloat(op.amount)?.toFixed(2)}</td>
                                 <td>{op.concept}</td>
                                 <td>{op.categoryName}</td>
                                 <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
@@ -192,7 +192,7 @@ function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }
                                 }
                                 onClick={() => { toggleHiddenRow(op.id) }}
                             >
-                                <td>{op.type === "IN" ? "+" : "-"} ${op.amount}</td>
+                                <td>{op.type === "IN" ? "+" : "-"} ${parseFloat(op.amount)?.toFixed(2)}</td>
                                 <td>{op.concept}</td>
                                 <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
                             </tr>,
