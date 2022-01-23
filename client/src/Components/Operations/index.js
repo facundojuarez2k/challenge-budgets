@@ -152,19 +152,21 @@ function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }
                                 <td>{op.categoryName}</td>
                                 <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
                                 <td>{op.type === "IN" ? "Income" : "Expense"}</td>
-                                <td className={styles.buttonsContainer}>
-                                    <button 
-                                        className="button blueBtn"
-                                        onClick={() => handleEditButton(op)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button 
-                                        className="button redBtn"
-                                        onClick={() => handleDeleteButton(op)}
-                                    >
-                                        Delete
-                                    </button>
+                                <td>
+                                    <div className={styles.buttonsContainer}>
+                                        <button 
+                                            className="button blueBtn"
+                                            onClick={() => handleEditButton(op)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button 
+                                            className="button redBtn"
+                                            onClick={() => handleDeleteButton(op)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))

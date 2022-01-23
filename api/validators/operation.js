@@ -14,8 +14,8 @@ const basicValidator = [
         .escape()
         .notEmpty()
         .withMessage('Amount field cannot be empty')
-        .isNumeric()
-        .withMessage('Value should be numeric')
+        .isDecimal({force_decimal: false, decimal_digits: '1,2'})
+        .withMessage('Allowed format: xxxxxx.yy')
         .custom(value => {
             return parseFloat(value) > 0;
         })
