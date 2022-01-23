@@ -28,12 +28,12 @@ function OperationsContainer() {
     }
 
     async function fetchOperations(filters = null) {
-        let url = apiConstants.URL_OPERATIONS;
+        let url = apiConstants.URL_OPERATIONS + "?limit=10";
 
         if(!isFetching) {
             if(filters !== null) {
                 const qs = _buildFiltersQueryString(filters);
-                url += "?" + qs;
+                url += "&" + qs;
             }
 
             isFetching = true;

@@ -3,12 +3,12 @@ import Modal from '../Modal';
 import moment from 'moment';
 import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
+import AddOperationForm from '../AddOperationForm';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters }) {
+function Operations({ data = [], applyFilters, addOperationFormData }) {
     const defaultFilters = {
-        search: "",
-        limit: "",
+        search: ""
     }
 
     const [isComponentMounted, setIsComponentMounted] = useState(false);
@@ -64,22 +64,29 @@ function Operations({ data = [], applyFilters }) {
     return(
         <div className={styles.wrapper}>
             <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
-                
+                <AddOperationForm 
+                    //onSubmit={addOperationFormData?.onSubmit}
+                    onSubmit={(values) => console.log(values)}
+                />
             </Modal>
 
             <nav className={styles.nav}>
-                <form 
-                    className={styles.search}
-                    onSubmit={onSearchFormSubmit}
-                >
-					<input 
-                        type="search"
-                        name="search"
-                        value={filters.search}
-                        onChange={onSearchInputChange}
-                    />
-					<button type="submit"><img src={searchLogo} alt="Search button icon" /></button>
-				</form>
+                <ul className={styles.filters}>
+                    <li>
+                        <form 
+                            className={styles.search}
+                            onSubmit={onSearchFormSubmit}
+                        >
+                            <input 
+                                type="search"
+                                name="search"
+                                value={filters.search}
+                                onChange={onSearchInputChange}
+                            />
+                            <button type="submit"><img src={searchLogo} alt="Search button icon" /></button>
+                        </form>
+                    </li>
+                </ul>
                 <ul className={styles.buttons}>
                     <li>
                         <button 
@@ -91,6 +98,8 @@ function Operations({ data = [], applyFilters }) {
                     </li>
                 </ul>
 			</nav>
+
+            <h1>Last operations</h1>
 
             <table className={`${styles.table} ${styles.desktop}`}>
                 <thead>
