@@ -1,33 +1,21 @@
 import API from './requests';
-import {ls, api, apiErrors} from '../Config/constants';
+import { api, apiErrors } from '../Config/constants';
 import { validationArrayToObject } from './utils';
 
-export async function isUserAuthenticated() {    
-    /* Test token */
-    try {
-        await API.get(api.URL_AUTH_TOKEN_TEST);
-        return true;
-    } catch(err) {
-        if(err.response && err.response.status === 401) {
-            localStorage.removeItem(ls.BEARER_TOKEN_KEY); // Remove invalid token
-        }
-        return false;
-    }
-}
-
-export async function authenticateUser(credentials = {}) {
+export async function createOperation(formData) {
     const result = {
+        newOperation: null,
         success: false,
         errorMessage: "",
         invalidFields: {}
     };
 
     try {
-        const {data} = await API.post(api.URL_AUTH_TOKEN, credentials);
-        localStorage.setItem(ls.BEARER_TOKEN_KEY, data.token);
+        const { data } = await API.post(api.URL_OPERATIONS, formData);
         result.success = true;
+        result.newOperation = data;
     } catch(err) {
-        let msg = "Failed to authenticate";
+        let msg = "Failed to create operation";
         
         if(err.response && err.response.data) {
             msg = err.response.data.message;
@@ -43,26 +31,21 @@ export async function authenticateUser(credentials = {}) {
     return result;
 }
 
-export async function createUser(userInfo = {}) {
+export async function updateOperation(id, formData) {
     const result = {
+        updatedOperation: null,
         success: false,
-        loggedIn: false,
         errorMessage: "",
         invalidFields: {}
     };
 
     try {
-        const { data } = await API.post(api.URL_USERS, userInfo);
-        
-        if(data && data.token) {
-            localStorage.setItem(ls.BEARER_TOKEN_KEY, data.token);
-            result.loggedIn = true;
-        }
+        const { data } = await API.put(`${api.URL_OPERATIONS}/${id}`, formData);
         result.success = true;
-
+        result.updatedOperation = data;
     } catch(err) {
-        let msg = "Failed to create user";
-
+        let msg = "Failed to update operation";
+        
         if(err.response && err.response.data) {
             msg = err.response.data.message;
             
@@ -73,6 +56,6 @@ export async function createUser(userInfo = {}) {
 
         result.errorMessage = msg;
     }
-    
+
     return result;
 }

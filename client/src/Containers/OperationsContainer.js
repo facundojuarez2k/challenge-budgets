@@ -1,11 +1,23 @@
 import { useEffect, useState } from 'react';
 import API from '../Services/requests';
+import { createOperation, updateOperation } from '../Services/operations';
 import Operations from '../Components/Operations';
 import { api as apiConstants } from '../Config/constants';
 
 function OperationsContainer() {
     const [operations, setOperations] = useState([]);
     const [isComponentMounted, setIsComponentMounted] = useState(true);
+    const [addOperationFormProps, setAddOperationFormProps] = useState({
+        onSubmit: (data) => addOperation(data),
+        errorMessage: "", 
+        invalidFields: {}
+    });
+    const [editOperationFormProps, setEditOperationFormProps] = useState({
+        onSubmit: (id, data) => editOperation(id, data),
+        errorMessage: "", 
+        invalidFields: {},
+        currentValues: {}
+    });
     let isFetching = false;
 
     useEffect(() => {        
@@ -57,21 +69,54 @@ function OperationsContainer() {
         fetchOperations(filters);
     }
 
-    async function createOperation(data) {
-        console.log(data);
+    async function addOperation(data) {
+        try {
+            const {newOperation, success, errorMessage, invalidFields} = await createOperation(data);
+            
+            if(success) {
+                setOperations(prev => {
+                    const newArray = prev.slice(0, prev.length-1);  // Copy all elements except the last one
+                    newArray.unshift(newOperation);                 // Insert new element at the start of the array
+                    return newArray;
+                });
+            }
+
+            setAddOperationFormProps(prev => {
+                return {
+                    ...prev,
+                    errorMessage,
+                    invalidFields
+                }
+            });
+        } catch(err) {}
+    }
+
+    async function editOperation(id, data) {
+        try {
+            const {updatedOperation, success, errorMessage, invalidFields} = await updateOperation(id, data);
+            
+            if(success) {
+                setOperations(prev => prev.map(function(op) {
+                    return (op.id === id) ? updatedOperation : op
+                }));
+            }
+
+            setEditOperationFormProps(prev => {
+                return {
+                    ...prev,
+                    errorMessage,
+                    invalidFields
+                }
+            });
+        } catch(err) {}
     }
 
     return (
         <Operations 
             data={operations} 
             applyFilters={applyFilters}
-            addOperationFormProps={
-                {
-                    onSubmit: (data) => createOperation(data),
-                    errorMessage: "", 
-                    invalidFields: {}
-                }
-            }
+            addOperationFormProps={addOperationFormProps}
+            editOperationFormProps={editOperationFormProps}
         />
     )
 }

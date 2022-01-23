@@ -4,9 +4,10 @@ import moment from 'moment';
 import styles from './styles.module.css';
 import searchLogo from '../../Assets/images/magnifying-glass.png';
 import AddOperationForm from '../AddOperationForm';
+import EditOperationForm from '../EditOperationForm';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters, addOperationFormProps = {} }) {
+function Operations({ data = [], applyFilters, addOperationFormProps = {}, editOperationFormProps = {} }) {
     const defaultFilters = {
         search: ""
     }
@@ -15,6 +16,8 @@ function Operations({ data = [], applyFilters, addOperationFormProps = {} }) {
     const [allowRowClick, setAllowRowClick] = useState(true);
     const [shownRows, setShownRows] = useState([]);
     const [showAddOperationModal, setShowAddOperationModal] = useState(false);
+    const [showEditOperationModal, setShowEditOperationModal] = useState(false);
+    const [editOperationFormElem, setEditOperationFormElem] = useState(null);
     const [filters, setFilters] = useState({...defaultFilters});
     const CLICK_INTERVAL = 500;
 
@@ -61,12 +64,42 @@ function Operations({ data = [], applyFilters, addOperationFormProps = {} }) {
         });
     }
 
+    function onEditOperation(id) {
+        const operation = data.find(op => op.id === id);
+        if(operation) {
+            setEditOperationFormElem(
+                <EditOperationForm 
+                    {...editOperationFormProps}
+                    onSubmit={(data) => editOperationFormProps.onSubmit(id, data)}
+                    currentValues={operation}
+                />
+            );
+        }
+    }
+
+    function handleEditButton(id) {
+        onEditOperation(id);
+        setShowEditOperationModal(true);
+    }
+
     return(
         <div className={styles.wrapper}>
             <Modal title="Add Operation" onHide={() => setShowAddOperationModal(false)} show={showAddOperationModal}>
                 <AddOperationForm 
                     {...addOperationFormProps}
                 />
+            </Modal>
+
+            <Modal 
+                title="Edit Operation" 
+                onHide={() => {
+                        setShowEditOperationModal(false);
+                        setEditOperationFormElem(null);
+                    }
+                } 
+                show={showEditOperationModal}
+            >
+                {editOperationFormElem}
             </Modal>
 
             <nav className={styles.nav}>
@@ -120,7 +153,14 @@ function Operations({ data = [], applyFilters, addOperationFormProps = {} }) {
                                 <td>{op.categoryName}</td>
                                 <td>{moment(op.date).format("MMM DD, YYYY")}</td>
                                 <td>{op.type === "IN" ? "Income" : "Expense"}</td>
-                                <td><button className="button blueBtn">Edit</button></td>
+                                <td>
+                                    <button 
+                                        className="button blueBtn"
+                                        onClick={() => handleEditButton(op.id)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     }
