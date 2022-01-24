@@ -27,12 +27,9 @@ function OperationsContainer() {
     
     async function _fetchBalance() {
         try {
-            const {balance, success, errorMessage} = await fetchBalance();
+            const {balance, success} = await fetchBalance();
             
-            if(success) 
-                setBalance(balance);
-
-            // Alert error message
+            if(success) setBalance(balance);
         } catch(err) {}
     }
 
@@ -44,13 +41,14 @@ function OperationsContainer() {
     async function onDeleteOperation(instance) {
         try {
             const {success, errorMessage} = await deleteOperation(instance.id);
-            if(success)
+            if(success) {
                 removeOperationById(instance.id);
-
-            // Alert error message
-        } catch(err) {
-            console.log(err);
-        }
+                _fetchBalance();
+            } else {
+                // Should never be thrown
+                console.log(errorMessage);
+            }
+        } catch(err) {}
     }
 
     return (
