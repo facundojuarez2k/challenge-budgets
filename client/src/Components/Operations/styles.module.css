@@ -14,7 +14,7 @@
     word-wrap: break-word;
 }
 
-.table.desktop {
+tr.showOnDesktop, th.showOnDesktop {
     display: none;
 }
 
@@ -148,10 +148,13 @@
 }
 
 @media (min-width: 650px) {
-    .table.desktop {
-        display: table;
+    tr.showOnDesktop {
+        display: table-row;
     }
-    .table.mobile {
+    th.showOnDesktop {
+        display: table-cell;
+    }
+    tr.showOnMobile, th.showOnMobile {
         display: none;
     }
 }

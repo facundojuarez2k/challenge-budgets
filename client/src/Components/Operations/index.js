@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Modal from '../Modal';
 import moment from 'moment';
 import styles from './styles.module.css';
@@ -11,44 +11,12 @@ function Operations({ data = [], balance, applyFilters, onDeleteOperation, error
     const defaultFilters = {
         search: ""
     }
-
-    const [isComponentMounted, setIsComponentMounted] = useState(false);
-    const [allowRowClick, setAllowRowClick] = useState(true);
-    const [shownRows, setShownRows] = useState([]);
     const [showAddOperationModal, setShowAddOperationModal] = useState(false);
     const [showEditOperationModal, setShowEditOperationModal] = useState(false);
     const [operationSelectedForUpdate, setOperationSelectedForUpdate] = useState(null);
     const [filters, setFilters] = useState({...defaultFilters});
-    const CLICK_INTERVAL = 500;
 
-    useEffect(() => {
-        setIsComponentMounted(true);
-        return () => { setIsComponentMounted(false) };
-    }, []);
-    
-    function toggleHiddenRow(id) {
-        
-        /* Click debounce */
-        setAllowRowClick(false);
-        setTimeout(() => {
-            if(isComponentMounted) setAllowRowClick(true);
-        }, CLICK_INTERVAL);
-
-        if(allowRowClick) {
-            setShownRows(prev => {
-                const index = prev.findIndex(rowId => rowId === id);
-                const arrayCopy = [...prev];
-                
-                if(index >= 0)  {// Remove row from shownRows array
-                    arrayCopy.splice(index, 1);
-                } else {   // Add row id to array
-                    arrayCopy.push(id);
-                }
-                
-                return arrayCopy;
-            });
-        }
-    }
+    const operationsList = useMemo(() => data, [data]);
 
     function onSearchFormSubmit(event) {
         event.preventDefault();
@@ -64,12 +32,12 @@ function Operations({ data = [], balance, applyFilters, onDeleteOperation, error
         });
     }
 
-    function handleEditButton(instance) {
+    function handleEditOperation(instance) {
         setOperationSelectedForUpdate(instance);
         setShowEditOperationModal(true);
     }
 
-    function handleDeleteButton(instance) {
+    function handleDeleteOperation(instance) {
         onDeleteOperation(instance);
     }
 
@@ -101,14 +69,14 @@ function Operations({ data = [], balance, applyFilters, onDeleteOperation, error
                 </Modal>
             }
 
-            { 
+            {   // Balance section
                 (balance && balance !== null) &&
                 <div className={styles.balance}>
                     <span className={styles.primary}>
-                        Balance: {`${balance.total < 0 ? "-" : ""}$${Math.abs(balance.total)}`}
+                        Balance: {`${balance.total < 0 ? "-" : ""}$${Math.abs(balance.total)?.toFixed(2)}`}
                     </span>
-                    <span className={styles.secondary}>Income: ${balance.in}</span> 
-                    <span className={styles.secondary}>Expense: ${balance.out}</span>
+                    <span className={styles.secondary}>Income: ${balance.in?.toFixed(2)}</span> 
+                    <span className={styles.secondary}>Expenses: ${balance.out?.toFixed(2)}</span>
                 </div>
             }
 
@@ -143,112 +111,147 @@ function Operations({ data = [], balance, applyFilters, onDeleteOperation, error
 
             <h1>Last operations</h1>
 
-            <table className={`${styles.table} ${styles.desktop}`}>
-                <thead>
-                    <tr>
-                        <th>Amount</th>
-                        <th>Concept</th>
-                        <th>Category</th>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data.map((op, index) => (
-                            <tr key={op.id} className={op.type === "IN" ? styles.green : styles.red}>
-                                <td>{op.type === "IN" ? "+" : "-"} ${parseFloat(op.amount)?.toFixed(2)}</td>
-                                <td>{op.concept}</td>
-                                <td>{op.categoryName}</td>
-                                <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
-                                <td>{op.type === "IN" ? "Income" : "Expense"}</td>
-                                <td>
-                                    <div className={styles.buttonsContainer}>
-                                        <button 
-                                            className="button blueBtn"
-                                            onClick={() => handleEditButton(op)}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button 
-                                            className="button redBtn"
-                                            onClick={() => handleDeleteButton(op)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
-            <table className={`${styles.table} ${styles.mobile}`}>
-                <thead>
-                    <tr>
-                        <th>Amount</th>
-                        <th>Concept</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data.map((op, index) => [
-                            <tr 
-                                key={op.id} 
-                                className={
-                                    `${op.type === "IN" ? styles.green : styles.red} 
-                                    ${styles.mobileRow}`
-                                }
-                                onClick={() => { toggleHiddenRow(op.id) }}
-                            >
-                                <td>{op.type === "IN" ? "+" : "-"} ${parseFloat(op.amount)?.toFixed(2)}</td>
-                                <td>{op.concept}</td>
-                                <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>
-                            </tr>,
-                            <tr 
-                                key={`extra_${op.id}`} 
-                                className={
-                                    `${styles.collapsibleRow} 
-                                    ${shownRows.includes(op.id) ? "" : styles.collapsed}
-                                    ${op.type === "IN" ? styles.green : styles.red}`
-                                }
-                            >
-                                <td colSpan={3}>
-                                    <div className={styles.content}>
-                                        <span>
-                                            <strong>Category</strong>: {op.categoryName}
-                                        </span>
-
-                                        <span>
-                                            <strong>Type</strong>: {op.type === "IN" ? "Income" : "Expense"}
-                                        </span>
-
-                                        <div className={styles.buttonsContainer}>
-                                            <button 
-                                                className="button blueBtn"
-                                                onClick={() => handleEditButton(op)}
-                                            >
-                                                Edit
-                                            </button>
-
-                                            <button 
-                                                className="button redBtn"
-                                                onClick={() => handleDeleteButton(op)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        ])
-                    }
-                </tbody>
-            </table>
+            <OperationsTable 
+                operationsList={operationsList}
+                handleDeleteButton={handleDeleteOperation}
+                handleEditButton={handleEditOperation}
+            />
+            
         </div>
     );
+}
+
+function OperationsTable({operationsList, handleDeleteButton, handleEditButton}) {
+    const [shownRows, setShownRows] = useState([]);
+    const [allowRowClick, setAllowRowClick] = useState(true);
+    const [isComponentMounted, setIsComponentMounted] = useState(false);
+    const CLICK_INTERVAL = 500;
+
+    useEffect(() => {
+        setIsComponentMounted(true);
+        return () => { setIsComponentMounted(false) };
+    }, []);
+
+    function toggleHiddenRow(id) {
+        
+        /* Click debounce */
+        setAllowRowClick(false);
+        setTimeout(() => {
+            if(isComponentMounted) setAllowRowClick(true);
+        }, CLICK_INTERVAL);
+
+        if(allowRowClick) {
+            setShownRows(prev => {
+                const index = prev.findIndex(rowId => rowId === id);
+                const arrayCopy = [...prev];
+                
+                if(index >= 0)  {// Remove row from shownRows array
+                    arrayCopy.splice(index, 1);
+                } else {   // Add row id to array
+                    arrayCopy.push(id);
+                }
+                
+                return arrayCopy;
+            });
+        }
+    }
+
+    return (
+        <>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Concept</th>
+                        <th className={styles.showOnDesktop}>Category</th>
+                        <th>Date</th>
+                        <th className={styles.showOnDesktop}>Type</th>
+                        <th className={`${styles.showOnDesktop} text-center`}>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        operationsList.map(op => {
+
+                            const buttons = (
+                                <>
+                                    <button 
+                                        className="button blueBtn"
+                                        onClick={() => handleEditButton(op)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        className="button redBtn"
+                                        onClick={() => handleDeleteButton(op)}
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            );
+
+                            const amountCell = <td>{op.type === "IN" ? "+" : "-"} ${parseFloat(op.amount)?.toFixed(2)}</td>;
+                            const conceptCell = <td>{op.concept}</td>;
+                            const categoryCell = <td>{op.categoryName}</td>;
+                            const dateCell = <td>{moment(op.date, "YYYY-MM-DD").format("MMM DD, YYYY")}</td>;
+                            const typeCell = <td>{op.type === "IN" ? "Income" : "Expense"}</td>;
+                            const buttonsCell = <td><div className={styles.buttonsContainer}>{buttons}</div></td>;
+
+                            return (
+                                [
+                                    <tr 
+                                        key={`tr_dsk_${op.id}`} 
+                                        className={`${styles.showOnDesktop} ${op.type === "IN" ? styles.green : styles.red}`}
+                                    >
+                                        {amountCell}
+                                        {conceptCell}
+                                        {categoryCell}
+                                        {dateCell}
+                                        {typeCell}
+                                        {buttonsCell}
+                                    </tr>,
+                                    <tr 
+                                        key={`tr_mob_${op.id}`} 
+                                        className={`${styles.showOnMobile} ${op.type === "IN" ? styles.green : styles.red} ${styles.mobileRow}`}
+                                        onClick={() => { toggleHiddenRow(op.id) }}
+                                    >
+                                        {amountCell}
+                                        {conceptCell}
+                                        {dateCell}
+                                    </tr>,
+                                    <tr 
+                                        key={`tr_mob_2_${op.id}`} 
+                                        className={
+                                            `${styles.showOnMobile}
+                                            ${styles.collapsibleRow} 
+                                            ${shownRows.includes(op.id) ? "" : styles.collapsed}
+                                            ${op.type === "IN" ? styles.green : styles.red}`
+                                        }
+                                    >
+                                        <td colSpan={3}>
+                                            <div className={styles.content}>
+                                                <span>
+                                                    <strong>Category</strong>: {op.categoryName}
+                                                </span>
+        
+                                                <span>
+                                                    <strong>Type</strong>: {op.type === "IN" ? "Income" : "Expense"}
+                                                </span>
+        
+                                                <div className={styles.buttonsContainer}>{buttons}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ]
+                            );
+                        })
+                    }
+                </tbody>
+            </table>
+        </>
+    )
 }
 
 export default Operations;

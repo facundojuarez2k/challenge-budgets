@@ -20,8 +20,6 @@ function OperationsContainer() {
             
             if(success) 
                 setOperations(operations);
-
-            // Alert error message
         } catch(err) {}
     }
     
@@ -35,7 +33,7 @@ function OperationsContainer() {
 
 
     function applyFilters(filters) {
-        fetch(filters);
+        _fetchOperations(filters);
     }
 
     async function onDeleteOperation(instance) {
@@ -45,7 +43,6 @@ function OperationsContainer() {
                 removeOperationById(instance.id);
                 _fetchBalance();
             } else {
-                // Should never be thrown
                 console.log(errorMessage);
             }
         } catch(err) {}

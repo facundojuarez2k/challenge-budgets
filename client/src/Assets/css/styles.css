@@ -107,6 +107,10 @@ button {
     font-size: 3.5em;
 }
 
+.text-center {
+    text-align: center;
+}
+
 @media (max-width: 350px) {
     .brand.lg {
         font-size: 2.5em;
