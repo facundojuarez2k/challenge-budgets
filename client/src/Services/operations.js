@@ -123,3 +123,27 @@ export async function deleteOperation(id) {
 
     return result;
 }
+
+export async function fetchBalance() {
+    const result = {
+        success: false,
+        balance: null,
+        errorMessage: ""
+    };
+
+    try {
+        const {data} = await API.get(api.URL_OPERATIONS_BALANCE);
+        result.balance = data;
+        result.success = true;
+    } catch(err) {
+        let msg = "Failed to fetch balance";
+        
+        if(err.response && err.response.data) {
+            msg = err.response.data.message;
+        }
+
+        result.errorMessage = msg;
+    }
+
+    return result;
+}

@@ -7,7 +7,7 @@ import AddOperationFormContainer from '../../Containers/AddOperationFormContaine
 import EditOperationFormContainer from '../../Containers/EditOperationFormContainer';
 import '../../Assets/css/styles.css';
 
-function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }) {
+function Operations({ data = [], balance, applyFilters, onDeleteOperation, errorMessage }) {
     const defaultFilters = {
         search: ""
     }
@@ -99,6 +99,17 @@ function Operations({ data = [], applyFilters, onDeleteOperation, errorMessage }
                         onSuccess={ () => setShowEditOperationModal(false) }
                     />
                 </Modal>
+            }
+
+            { 
+                (balance && balance !== null) &&
+                <div className={styles.balance}>
+                    <span className={styles.primary}>
+                        Balance: {`${balance.total < 0 ? "-" : ""}$${Math.abs(balance.total)}`}
+                    </span>
+                    <span className={styles.secondary}>Income: ${balance.in}</span> 
+                    <span className={styles.secondary}>Expense: ${balance.out}</span>
+                </div>
             }
 
             <nav className={styles.nav}>

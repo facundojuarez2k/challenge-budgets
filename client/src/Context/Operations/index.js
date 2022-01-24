@@ -6,11 +6,13 @@ import {
     REMOVE_OPERATION_BY_ID,
     UPDATE_OPERATION_BY_ID, 
     ADD_MANY_OPERATIONS,
-    SET_OPERATIONS
+    SET_OPERATIONS,
+    SET_BALANCE
 } from './types';
 
 const initialState = {
-    operations : []
+    operations : [],
+    balace: null,
 }
 
 export const OperationsContext = createContext(initialState);
@@ -60,17 +62,26 @@ export const OperationsProvider = ({ children }) => {
         });
     }
 
+    function setBalance(value) {
+        dispatch({
+            type: SET_BALANCE,
+            payload: value
+        });
+    }
+
    return(
         <OperationsContext.Provider 
             value = {
                 {
-                    operations : state.operations, 
+                    operations : state.operations,
+                    balance: state.balance, 
                     addOperation,
                     removeOperation,
                     removeOperationById,
                     updateOperationById,
                     addManyOperations,
-                    setOperations
+                    setOperations,
+                    setBalance
                 }
             }
         > 

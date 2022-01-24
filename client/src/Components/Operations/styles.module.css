@@ -129,6 +129,24 @@
     height: 100%;
 }
 
+.balance {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: flex-start;
+    font-weight: 500;
+    color: #2699ab;
+}
+
+.balance .primary {
+    font-size: 2em;
+}
+
+.balance .secondary {
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
 @media (min-width: 650px) {
     .table.desktop {
         display: table;

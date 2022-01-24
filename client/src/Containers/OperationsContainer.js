@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
-import { fetchOperations, deleteOperation } from '../Services/operations';
+import { fetchOperations, deleteOperation, fetchBalance } from '../Services/operations';
 import Operations from '../Components/Operations';
 import { useOperationsContext } from '../Context/Operations';
 
 function OperationsContainer() {
-    const { operations, setOperations, removeOperationById } = useOperationsContext();
+    const { operations, setOperations, removeOperationById, balance, setBalance } = useOperationsContext();
     const [isComponentMounted, setIsComponentMounted] = useState(true);
     //const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {        
-        fetch();
+        _fetchOperations();
+        _fetchBalance();
         return () => { setIsComponentMounted(false) };
     }, []);
 
-    async function fetch(filters = null) {
+    async function _fetchOperations(filters = null) {
         try {
             const {operations, success, errorMessage} = await fetchOperations(filters, 10);
             
@@ -23,6 +24,18 @@ function OperationsContainer() {
             // Alert error message
         } catch(err) {}
     }
+    
+    async function _fetchBalance() {
+        try {
+            const {balance, success, errorMessage} = await fetchBalance();
+            
+            if(success) 
+                setBalance(balance);
+
+            // Alert error message
+        } catch(err) {}
+    }
+
 
     function applyFilters(filters) {
         fetch(filters);
@@ -45,6 +58,7 @@ function OperationsContainer() {
             data={operations} 
             applyFilters={applyFilters}
             onDeleteOperation={onDeleteOperation}
+            balance={balance}
         />
     )
 }
