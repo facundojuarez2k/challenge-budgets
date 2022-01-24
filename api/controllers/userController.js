@@ -1,9 +1,10 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const ms = require('ms');
 const { responseCodes } = require('../config/constants');
+const { generateToken } = require('./authController');
 
 exports.create = async function(req, res, next) {
     try {
@@ -27,19 +28,14 @@ exports.create = async function(req, res, next) {
             password: encryptedPassword
         });
 
+        const expiresIn = process.env.TOKEN_EXPIRATION_TIME || "30m";
+
         // Generate token
-        const token = jwt.sign(
-            { 
-                userId: newUser.id,
-                email: newUser.email
-            },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: process.env.TOKEN_EXPIRATION_TIME || "30m",
-            }
-        );
+        const token = generateToken(newUser.id, newUser.email, expiresIn);
+
+        const expiration = Date.now() + ms(expiresIn);
         
-        return res.status(201).json({userId: newUser.id, token});
+        return res.status(201).json({userId: newUser.id, token, expiration});
     } catch(err) {
         console.log(err);
         return res.status(500).send();

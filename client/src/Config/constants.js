@@ -1,5 +1,6 @@
 export const ls = Object.freeze({
-    BEARER_TOKEN_KEY: "bearerToken"
+    BEARER_TOKEN_KEY: "bearerToken",
+    BEARER_TOKEN_EXPIRATION: "bearerTokenExp",
 });
 
 export const api = Object.freeze({

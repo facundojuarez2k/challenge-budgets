@@ -4,17 +4,24 @@ import LoginForm from '../Components/LoginForm';
 import { useAuthContext } from '../Context/Auth';
 
 function LoginFormContainer() {
-    const { setIsLoggedIn } = useAuthContext();
+    const { setIsLoggedIn, autoLogOff } = useAuthContext();
     const [errorMessage, setErrorMessage] = useState([]);
     const [invalidFields, setInvalidFields] = useState({});
 
     async function handleLogin(credentials) {
         setInvalidFields([]);
         try {
-            const {success, errorMessage, invalidFields: _invalidFields} = await authenticateUser(credentials);
+            const {success, expiration, errorMessage, invalidFields: _invalidFields} 
+                = await authenticateUser(credentials);
 
             if(success) {
+                const expiresIn = parseInt(expiration) - Date.now();
+
                 setIsLoggedIn(true);
+                
+                if(expiresIn > 0) {
+                    autoLogOff(expiresIn);
+                }
             } else {
                 setErrorMessage(errorMessage);
                 setInvalidFields(_invalidFields);

@@ -18,12 +18,20 @@ export const AuthProvider = ({ children }) => {
         });
     }
 
+    function autoLogOff(time) {
+        setTimeout(() => dispatch({
+            type: SET_IS_LOGGED_IN,
+            payload: false
+        }), time);
+    }
+
    return(
         <AuthContext.Provider 
             value = {
                 {
                     isLoggedIn: state.isLoggedIn,
-                    setIsLoggedIn
+                    setIsLoggedIn,
+                    autoLogOff
                 }
             }
         > 
