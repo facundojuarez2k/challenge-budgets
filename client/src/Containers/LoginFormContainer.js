@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { authenticateUser } from '../Services/auth';
 import LoginForm from '../Components/LoginForm';
+import { useAuthContext } from '../Context/Auth';
 
-function LoginFormContainer({ onAuthenticated }) {
+function LoginFormContainer() {
+    const { setIsLoggedIn } = useAuthContext();
     const [errorMessage, setErrorMessage] = useState([]);
     const [invalidFields, setInvalidFields] = useState({});
 
@@ -12,7 +14,7 @@ function LoginFormContainer({ onAuthenticated }) {
             const {success, errorMessage, invalidFields: _invalidFields} = await authenticateUser(credentials);
 
             if(success) {
-                onAuthenticated();
+                setIsLoggedIn(true);
             } else {
                 setErrorMessage(errorMessage);
                 setInvalidFields(_invalidFields);
