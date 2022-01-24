@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isUserAuthenticated } from './Services/auth';
+import { isUserAuthenticated, logout } from './Services/auth';
 import LoginFormContainer from './Containers/LoginFormContainer';
 import RegisterFormContainer from './Containers/RegisterFormContainer';
 import OperationsContainer from './Containers/OperationsContainer';
@@ -34,9 +34,19 @@ function App() {
 		setShowLoginForm(prev => !prev);
 	}
 
+	function handleLogoutButton() {
+		setIsLoggedIn(false);
+		logout();
+	}
+
 	return (
 		<div className={styles.App}>
 			<LoadingSpinner show={isLoading} fullScreen={true} />
+			<nav className="container">
+				{isLoggedIn && 
+					<button className="button" onClick={handleLogoutButton}>Log out</button>
+				}
+			</nav>
 			{
 				(isLoggedIn === false)
 				?

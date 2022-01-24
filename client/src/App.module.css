@@ -5,7 +5,6 @@
 }
 
 .App main {
-  padding-top: 30px;
   padding-bottom: 30px;
   justify-self: center;
 }
@@ -16,4 +15,11 @@
   align-items: center;
   gap: 2rem;
   padding: 60px 10px 0 10px;
+}
+
+.App > nav {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  padding-top: 10px;
 }

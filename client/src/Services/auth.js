@@ -9,8 +9,7 @@ export async function isUserAuthenticated() {
         return true;
     } catch(err) {
         if(err.response && err.response.status === 401) {
-            localStorage.removeItem(ls.BEARER_TOKEN_KEY); // Remove invalid token
-            localStorage.removeItem(ls.BEARER_TOKEN_EXPIRATION);
+            logout();
         }
         return false;
     }
@@ -85,4 +84,9 @@ export async function createUser(userInfo = {}) {
     }
     
     return result;
+}
+
+export function logout() {
+    localStorage.removeItem(ls.BEARER_TOKEN_KEY);
+    localStorage.removeItem(ls.BEARER_TOKEN_EXPIRATION);
 }
