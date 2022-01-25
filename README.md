@@ -319,36 +319,44 @@ Retorna código de estado 204 al eliminar la operación.
     <tr>
       <th>code</th>
       <th>Significado</th>
+      <th>Código de estado HTTP</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>AUTH001</td>
       <td>El token de autorización es inválido o ha expirado</td>
+      <td>401</td>
     </tr>
     <tr>
       <td>AUTH002</td>
       <td>El usuario asociado al token existe</td>
+       <td>401</td>
     </tr>
     <tr>
       <td>AUTH003</td>
       <td>Las credenciales provistas son inválidas</td>
+       <td>400</td>
     </tr>
     <tr>
       <td>ERRVAL001</td>
       <td>Los datos en el cuerpo de la solicitud no son válidos. <b>Añade el campo 'errors' al cuerpo de la respuesta</b></td>
+       <td>422</td>
     </tr>
     <tr>
       <td>ACC001</td>
       <td>El usuario intenta acceder a un recurso sobre el cual no tiene autorización</td>
+       <td>403</td>
     </tr>
     <tr>
       <td>RSRC001</td>
       <td>El recurso no existe</td>
+       <td>404</td>
     </tr>
     <tr>
       <td>RSRC002</td>
       <td>El recurso ya existe en el sistema.</td>
+       <td>409</td>
     </tr>
   </tbody>
 </table>
