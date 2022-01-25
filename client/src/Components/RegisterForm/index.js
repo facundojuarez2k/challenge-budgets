@@ -21,7 +21,7 @@ function RegisterForm({ onSubmit, errorMessage, invalidFields }) {
 
     return (
         <div className="form-wrapper">
-            <h1>Sign up</h1>
+            <h1>Create Account</h1>
             <Form 
                 fields={fields} 
                 onSubmit={onSubmit} 

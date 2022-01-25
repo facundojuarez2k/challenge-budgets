@@ -62,7 +62,7 @@ function App() {
 										onClick={toggleLoginForm}
 										disabled={isLoading}
 									>
-										Sign Up
+										Create an account
 									</button>
 								</>
 								:
