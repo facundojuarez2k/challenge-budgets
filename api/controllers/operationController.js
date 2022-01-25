@@ -120,9 +120,7 @@ exports.create = async function(req, res, next) {
 exports.get = async function(req, res, next) {
     try {
         const user = res.locals.user;
-        const operation = await Operation.findByPk(req.params.id, {
-            attributes: {exclude: ['userId']}
-        });
+        const operation = await Operation.findByPk(req.params.id);
         
         if(operation === null)
             return res
@@ -135,7 +133,9 @@ exports.get = async function(req, res, next) {
                     .json(responseCodes.forbidden.details);
         }
 
-        return res.json(operation);
+        const {userId, ...filteredOperation} = operation.dataValues;
+
+        return res.json(filteredOperation);
     } catch(err) {
         console.log(err);
         return res.status(500).send();
@@ -178,9 +178,11 @@ exports.update = async function(req, res, next) {
         });
         operation.changed('updatedAt', true); // Allow modification of updatedAt field
         
-        await operation.save();
+        const saved = await operation.save();
 
-        return res.json(operation);
+        const {userId, ...filteredOperation} = saved.dataValues;
+
+        return res.json(filteredOperation);
     } catch(err) {
         console.log(err);
         return res.status(500).send();
